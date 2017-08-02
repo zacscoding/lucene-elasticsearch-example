@@ -16,7 +16,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 @Configuration
 @PropertySource(value = "classpath:properties/elasticsearch.properties")
-@EnableElasticsearchRepositories(basePackages = { "com.accessflow.repository.es" })
+@EnableElasticsearchRepositories(basePackages = { "com.estest.repository.es" })
 public class EsConfig {	
 	@Value("${elasticsearch.host}")
 	private String EsHost;
