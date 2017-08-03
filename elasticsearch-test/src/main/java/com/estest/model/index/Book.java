@@ -25,19 +25,10 @@ public class Book {
 	private Long price;
 	@Version
     private Long version;
-	
-	public Map<Integer, Collection<String>> getBuckets() {
-		return buckets;
-	}
-
-	public void setBuckets(Map<Integer, Collection<String>> buckets) {
-		this.buckets = buckets;
-	}
-
 	@Field(type = FieldType.Nested)
 	private Map<Integer, Collection<String>> buckets = new HashMap();
-
-    public Book(){}
+	
+	public Book(){}
 
     public Book(String id, String name,Long version) {
         this.id = id;
@@ -76,5 +67,13 @@ public class Book {
     public void setVersion(long version) {
         this.version = version;
     }
+    
+    public Map<Integer, Collection<String>> getBuckets() {
+		return buckets;
+	}
+
+	public void setBuckets(Map<Integer, Collection<String>> buckets) {
+		this.buckets = buckets;
+	}
 
 }

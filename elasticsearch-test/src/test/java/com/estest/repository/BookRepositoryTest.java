@@ -3,12 +3,17 @@ package com.estest.repository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+
+import com.estest.model.index.Book;
+import com.estest.repository.es.BookRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import javax.annotation.Resource;
@@ -28,9 +33,6 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.estest.model.index.Book;
-import com.estest.repository.es.BookRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -84,46 +86,87 @@ public class BookRepositoryTest {
 		assertThat(book2.getId(), is(indexBook2.getId()));
 		assertThat(book2.getName(), is(indexBook2.getName()));
 	}
-	
-	 @Test
-	 public void shouldCountAllElementsInIndex() {
-		 List<Book> books = new ArrayList<>();
-		 Queue<String> que = new LinkedList<>();
-		 
-		 for(int i=1; i<=10; i++) {
-			 String bookName = "Spring Data Books"+i;
-			 books.add(new Book(null,bookName, System.currentTimeMillis()));
-			 que.offer(bookName);
-		 }
-		 
-		 // maintain order?
-		 repository.save(books).forEach(k-> {
-			 //System.out.println(k.getName());		
-			 assertThat(que.poll(), is(k.getName()));
-		 }); 
-		 
-		 long count = repository.count();
-		 assertThat(count,is(10L));
-	 }
-	 
-	 @Test
-	 public void shouldExecuteCustomSearchQueries() {
-		 Book book1 = new Book(null,"Custom Query",System.currentTimeMillis());
-		 Book book2 = new Book(null,null,System.currentTimeMillis());
-		 
-		 // save
-		 repository.save(Arrays.asList(book1,book2));
-		 
-		 SearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery())
-				 			.withFilter(QueryBuilders.boolQuery().must(QueryBuilders.existsQuery("name")))
-				 			.withPageable(new PageRequest(0,10))
-				 			.build();
-		 
-		 Page<Book> books = repository.search(query);
-		 assertThat(books.getTotalElements(), is(1L));
-	 }
-	
-	
+
+	@Test
+	public void shouldCountAllElementsInIndex() {
+		List<Book> books = new ArrayList<>();
+		Queue<String> que = new LinkedList<>();
+
+		for (int i = 1; i <= 10; i++) {
+			String bookName = "Spring Data Books" + i;
+			books.add(new Book(null, bookName, System.currentTimeMillis()));
+			que.offer(bookName);
+		}
+
+		// maintain order?
+		repository.save(books).forEach(k -> {
+			//System.out.println(k.getName());		
+			assertThat(que.poll(), is(k.getName()));
+		});
+
+		long count = repository.count();
+		assertThat(count, is(10L));
+	}
+
+	@Test
+	public void shouldExecuteCustomSearchQueries() {
+		Book book1 = new Book(null, "Custom Query", System.currentTimeMillis());
+		Book book2 = new Book(null, null, System.currentTimeMillis());
+
+		// save
+		repository.save(Arrays.asList(book1, book2));
+
+		SearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery())
+				.withFilter(QueryBuilders.boolQuery().must(QueryBuilders.existsQuery("name")))
+				.withPageable(new PageRequest(0, 10)).build();
+
+		Page<Book> books = repository.search(query);
+		assertThat(books.getTotalElements(), is(1L));
+		assertThat(books.getContent().get(0).getName(), is(book1.getName()));
+	}
+
+	@Test
+	public void shouldReturnBooksForCustomMethodsWithAndCriteria() {
+		Book book1 = new Book(null, "test", System.currentTimeMillis());
+		Book book2 = new Book(null, "test", System.currentTimeMillis());
+
+		book1.setPrice(10L);
+		book2.setPrice(10L);
+
+		repository.save(Arrays.asList(book1, book2));
+
+		Page<Book> book = repository.findByNameAndPrice("test", 10L, new PageRequest(0, 10));
+		assertThat(book.getContent().size(), is(2));
+
+		book = repository.findByNameAndPrice("test2", 10L, new PageRequest(0, 10));
+		assertThat(book.getContent().size(), is(0));
+	}
+
+	@Test
+	public void shouldReturnBooksForGivenBucketUsingTemplate() {
+		Book book1 = new Book(null,"test1",System.currentTimeMillis());
+		Book book2 = new Book(null,"test2",System.currentTimeMillis());
+		
+		Map<Integer, Collection<String>> map1 = new HashMap<>();
+		map1.put(1, Arrays.asList("test11,test12","test13"));
+		map1.put(2, Arrays.asList("test21,test22"));
+		
+		Map<Integer, Collection<String>> map2 = new HashMap<>();
+		map2.put(1, Arrays.asList("test31,test32"));
+		
+		book1.setBuckets(map1);
+		book2.setBuckets(map2);
+		
+		repository.save(Arrays.asList(book1,book2));
+		
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.nestedQuery("buckets", QueryBuilders.termQuery("buckets.1","test13")))	
+						.build();
+		System.out.println("searchQuery : " + searchQuery.getQuery().toString());
+		
+		Page<Book> books = repository.search(searchQuery);		
+		
+		assertThat(books.getContent().size(), is(1));
+	}
 
 	@Test
 	@Ignore("not to run as just for showing usage of repository ! might throw java.lang.OutOfMemoryError :-) ")
