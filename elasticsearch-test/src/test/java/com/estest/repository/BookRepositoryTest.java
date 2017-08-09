@@ -6,20 +6,25 @@ import static org.junit.Assert.assertThat;
 
 import com.estest.model.index.Book;
 import com.estest.repository.es.BookRepository;
+import com.estest.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -46,6 +51,45 @@ public class BookRepositoryTest {
 	@Before
 	public void setUp() {
 		repository.deleteAll();
+	}
+	
+	@Test
+	public void searchWithSort() {
+		// given
+		int cnt = 20;
+		PriorityQueue<String> ascNameQue = new PriorityQueue<>();
+		PriorityQueue<String> descNameQue = new PriorityQueue<>(Collections.reverseOrder());
+		List<Book> bookList = new ArrayList<>(20);		
+		for(int i=0; i<cnt; i++) {
+			String randomValue = StringUtils.randomValue(5);
+			ascNameQue.offer(randomValue);
+			descNameQue.offer(randomValue);
+			
+			Book book = new Book(String.valueOf(i),randomValue,System.currentTimeMillis());
+			bookList.add(book);
+		}		
+		repository.save(bookList);
+		
+		// when
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery())
+								.withSort(new FieldSortBuilder("name").order(SortOrder.ASC))
+								.build();
+		
+		repository.search(searchQuery).forEach(k -> {
+			// then
+			assertThat(k.getName(), is(ascNameQue.poll()));
+		});
+		
+		// when
+		searchQuery = new NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery())
+				.withSort(new FieldSortBuilder("name").order(SortOrder.DESC))
+				.build();
+		
+		repository.search(searchQuery).forEach(k -> {
+			// then
+			assertThat(k.getName(), is(descNameQue.poll()));
+		});
+		
 	}
 
 	// save and search
