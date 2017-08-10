@@ -1,4 +1,4 @@
-package com.estest.repository;
+package com.estest.repository.es;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
