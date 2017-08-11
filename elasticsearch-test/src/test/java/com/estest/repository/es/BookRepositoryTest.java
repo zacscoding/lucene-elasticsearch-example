@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-import com.estest.model.index.Book;
+import com.estest.model.withdoc.Book;
 import com.estest.repository.es.BookRepository;
 import com.estest.util.StringUtils;
 

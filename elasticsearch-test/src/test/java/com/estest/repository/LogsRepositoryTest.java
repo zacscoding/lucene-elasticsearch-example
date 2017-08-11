@@ -3,7 +3,7 @@ package com.estest.repository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.estest.model.Logs;
+import com.estest.model.nondoc.Logs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Calendar;
@@ -75,8 +75,7 @@ public class LogsRepositoryTest {
 		
 		Logs find2 = elasticsearchTemplate.queryForObject(getQuery, Logs.class);
 		System.out.println(find2.toString());
-		assertThat(find2.toString(),is(log2.toString()));
-		
+		assertThat(find2.toString(),is(log2.toString()));		
 	}
 	
 	private Date getDate(String dateVal) {

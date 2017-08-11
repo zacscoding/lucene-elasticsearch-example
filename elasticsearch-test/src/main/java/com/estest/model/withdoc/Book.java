@@ -1,4 +1,4 @@
-package com.estest.model.index;
+package com.estest.model.withdoc;
 
 import java.util.Collection;
 import java.util.HashMap;

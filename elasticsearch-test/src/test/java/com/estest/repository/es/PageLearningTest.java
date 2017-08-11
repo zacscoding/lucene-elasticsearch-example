@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.estest.model.index.Book;
+import com.estest.model.withdoc.Book;
 import com.estest.repository.es.BookRepository;
 
 import java.util.ArrayList;

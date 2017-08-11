@@ -1,6 +1,6 @@
 package com.estest.util;
 
-import com.estest.model.Logs;
+import com.estest.model.nondoc.Logs;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

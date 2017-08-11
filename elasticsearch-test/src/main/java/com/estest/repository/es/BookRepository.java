@@ -1,6 +1,6 @@
 package com.estest.repository.es;
 
-import com.estest.model.index.Book;
+import com.estest.model.withdoc.Book;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

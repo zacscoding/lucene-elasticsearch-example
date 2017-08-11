@@ -1,4 +1,4 @@
-package com.estest.model;
+package com.estest.model.nondoc;
 
 import com.estest.util.JacksonUtils;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
