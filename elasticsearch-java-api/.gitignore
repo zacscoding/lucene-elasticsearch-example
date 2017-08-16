@@ -1,0 +1,14 @@
+*.class
+*.properties
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Eclipse Project
+.classpath
+.project
+.settings/
+target/
+workspaces/
