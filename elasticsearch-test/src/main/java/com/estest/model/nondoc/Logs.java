@@ -1,10 +1,10 @@
 package com.estest.model.nondoc;
 
+import java.util.Date;
+
 import com.estest.util.JacksonUtils;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-import java.util.Date;
 
 /**
  * Logs entity
