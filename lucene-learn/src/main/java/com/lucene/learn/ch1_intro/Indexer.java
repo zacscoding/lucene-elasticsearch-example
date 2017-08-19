@@ -14,7 +14,15 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-public class Indexer {    
+public class Indexer {
+    /**
+     * 어플리케이션을 실행하는 메인 메소드
+     * 
+     * @author zaccoding
+     * @date 2017. 8. 19.
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         //String indexDir = ScannerUtils.nextLine(scanner,"[루씬 색인을 저장할 디렉터리] : ");
@@ -45,7 +53,11 @@ public class Indexer {
     }
     
     private IndexWriter writer;
-    
+    /**
+     * 생성자
+     * @param indexDir 인덱싱 할 디렉터리
+     * @throws IOException
+     */
     public Indexer(String indexDir) throws IOException {
         Directory dir = FSDirectory.open(new File(indexDir));        
         writer = new IndexWriter(dir,new StandardAnalyzer(Version.LUCENE_30),true,IndexWriter.MaxFieldLength.UNLIMITED);        
@@ -55,6 +67,16 @@ public class Indexer {
         writer.close();            
     }
     
+    /**
+     * data가 존재하는 디렉터리로 부터 인덱싱을 처리하는 메소드
+     * 
+     * @author zaccoding
+     * @date 2017. 8. 19.
+     * @param dataDir : 데이터가 존재하는 디렉터리
+     * @param filter : 인덱싱을 할지 말지 필터
+     * @return : 색인 된 문서 건수
+     * @throws Exception
+     */
     public int index(String dataDir, FileFilter filter) throws Exception {
         File[] files = new File(dataDir).listFiles();
         
@@ -68,6 +90,13 @@ public class Indexer {
         return writer.numDocs();
     }
     
+    /**
+     * 텍스트 파일 필터 클래스
+     * .txt로 끝나는 파일만 accept 한다.
+     * 
+     * @author zaccoding
+     * @date 2017. 8. 19.
+     */
     private static class TextFilesFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
