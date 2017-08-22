@@ -5,6 +5,7 @@ import java.util.Date;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.rest.RestStatus;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,24 +37,22 @@ public class BasicApiTest {
         
         ObjectMapper mapper = new ObjectMapper();
         byte[] json = mapper.writeValueAsBytes(entity);
-        
-        
+                
         // save
-        IndexResponse response = client.prepareIndex("sample","entity",entity.getId())
-                                        .setSource(json).get();
+        IndexResponse response = client.prepareIndex("sample","entity",entity.getId()).setSource(mapper.writeValueAsString(entity)).get();                                        
                 
         // result
         String _index = response.getIndex();
         String _type = response.getType();
         String _id = response.getId();
         long _version = response.getVersion();
-        boolean created = response.isCreated();        
+        RestStatus status = response.status();
                 
         System.out.println("index : " + _index);
         System.out.println("_type : " + _type);
         System.out.println("_id : " + _id);
         System.out.println("_version : " + _version);
-        System.out.println("created : " + created);
+        System.out.println("status_ : " + status.getStatus());
         
         GetResponse getResponse = client.prepareGet("sample", "entity", entity.getId()).setOperationThreaded(false).get();
         getResponse.getSource().forEach((k,v)->{System.out.println("key : " + k + ", value : " + v);});        
