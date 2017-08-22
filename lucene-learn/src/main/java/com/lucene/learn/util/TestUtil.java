@@ -15,7 +15,8 @@ public class TestUtil {
 
     public static Directory getBookIndexDirectory() throws IOException{
         // The build.xml ant script sets this property for us:
-        return FSDirectory.open(new File(System.getProperty("index.dir")));
+        final String indexDir = "D:\\lucene\\resource\\lia2e\\build\\index";
+        return FSDirectory.open(new File(indexDir));
     }
 
 }
