@@ -12,6 +12,15 @@ public class SampleEntity {
     private String name;
     private Integer age;
     private Date regDate;
+    
+    public SampleEntity(){}
+    public SampleEntity(String id, String name, Integer age, Date regDate) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.regDate = regDate;
+    }
+    
     public String getId() {
         return id;
     }
@@ -35,10 +44,23 @@ public class SampleEntity {
     }
     public void setRegDate(Date regDate) {
         this.regDate = regDate;
-    }
-    
+    }    
     @Override
     public String toString() {
         return new Gson().toJson(this);
-    }    
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null)
+            return false;
+        if(!(obj instanceof SampleEntity)) {
+            return false;
+        }
+        SampleEntity inst = (SampleEntity)obj;
+        
+        return age.equals(inst.age) && name.equals(inst.name) && regDate.equals(inst.regDate);
+    }
+    
+    
 }

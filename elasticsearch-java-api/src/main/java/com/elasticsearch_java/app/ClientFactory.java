@@ -10,10 +10,11 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 public class ClientFactory {
-    private static final Logger logger = Logger.getLogger(ClientFactory.class);    
-    private static final String CLUSTER_NAME = "es5_test";
-    private static final String HOST_IP = "192.168.100.155";
+    private static final String CLUSTER_NAME = "es_test";
+    private static final String HOST_IP = "192.168.100.149";
     private static final int TRANSPORT = 9300; 
+    //private static final String HOST_IP = "127.0.0.1";
+    //private static final int TRANSPORT = 9200;
     private static TransportClient CLIENT;
     
     public static TransportClient getClient() {
@@ -29,7 +30,6 @@ public class ClientFactory {
             CLIENT = new PreBuiltTransportClient(settings)
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(HOST_IP),TRANSPORT ));
         } catch (UnknownHostException e) {
-            logger.error("## [fail to connect to es]",e);
             throw new RuntimeException(e);
         }
     }
