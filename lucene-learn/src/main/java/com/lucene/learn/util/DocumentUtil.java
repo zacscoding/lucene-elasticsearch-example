@@ -1,8 +1,16 @@
 package com.lucene.learn.util;
 
-import org.apache.lucene.document.Document;
+import java.io.IOException;
 
-public class DocumentUtil {
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
+
+public class DocumentUtil {    
+    public static Document getDocumentFromSearch(IndexSearcher searcher, TopDocs docs, int idx) throws CorruptIndexException, IOException {        
+        return searcher.doc(docs.scoreDocs[idx].doc);
+    }
     
     public static void displayDocument(String prefix, Document docu, String suffix) {
         System.out.println(prefix);
