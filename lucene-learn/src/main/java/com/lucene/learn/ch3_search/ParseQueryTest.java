@@ -73,7 +73,33 @@ public class ParseQueryTest extends TestCase {
         return matches.totalHits > 0; 
     }
     
-    
-    
-
+    /**
+     * 다중 텀 구문 
+     */
+    public void testMultiple() throws Exception {
+        // "field" : "the quick brown fox jumped over the lazy dog"
+        
+        // quick -> -> , lazy <- <-
+        assertFalse("not close enough", matched(new String[]{"quick", "jumped", "lazy"}, 3));        
+        assertTrue("just enough", matched(new String[]{"quick", "jumped", "lazy"}, 4));
+        
+        // 
+        assertFalse("almost but not quite", matched(new String[]{"lazy", "jumped", "quick"}, 7));
+        assertTrue("bingo", matched(new String[]{"lazy", "jumped", "quick"}, 8));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
