@@ -7,11 +7,18 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 
 import junit.framework.TestCase;
 
@@ -57,7 +64,6 @@ public class ParseQueryTest extends TestCase {
         // (fox -> -> && anything ->) == (slop == 3)
         assertTrue("hop hop slop", matched(phrase, 3));
     }
-    
     
     private boolean matched(String[] phrase, int slop) throws IOException {
         // PhraseQuery 인스턴스 생성
