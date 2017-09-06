@@ -104,7 +104,25 @@ public class QueryParserTest extends TestCase {
        assertEquals("sloppy, implicitly", "\"sloppy phrase\"~5", query.toString("field"));
    }
    
+   // 퍼지 검색
+   public void testFuzzyQuery() throws Exception {
+       QueryParser parser = new QueryParser(Version.LUCENE_30, "subject", analyzer);
+       Query query = parser.parse("kountry~");
+       // fuzzy : subject:kountry~0.5       
+       System.out.println("fuzzy : " + query.toString());
+       
+       query = parser.parse("kountry~0.7");
+       // fuzzy2 : subject:kountry~0.7
+       System.out.println("fuzzy2 : " + query.toString());
+   }
    
-    
-
+   // 질의 그룹
+   public void testGrouping() throws Exception {
+       Query query = new QueryParser(Version.LUCENE_30, "subject", analyzer)
+               .parse("(agile OR extreme) AND methodology");
+       
+       TopDocs matches = searcher.search(query,10);
+       assertTrue(TestUtil.hitsIncludeTitle(searcher, matches, "Extreme Programming Explained"));
+       assertTrue(TestUtil.hitsIncludeTitle(searcher, matches, "The Pragmatic Programmer"));
+   }   
 }
