@@ -24,7 +24,7 @@ public class Indexer {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         //String indexDir = ScannerUtils.nextLine(scanner,"[루씬 색인을 저장할 디렉터리] : ");
         //String dataDir = ScannerUtils.nextLine(scanner, "[색인할 대상 파일이 들어있는 디렉터리] : ");
         String indexDir = GeneralConfig.INDEX_DIR;
@@ -47,11 +47,9 @@ public class Indexer {
         }
         
         long end = System.currentTimeMillis();
-        System.out.println("Indexing " + numIndexed + "files took" + (end -start) + "ms");
-                
-        scanner.close();
+        System.out.println("## Indexing " + numIndexed + "files took" + (end -start) + "ms");
     }
-    
+
     private IndexWriter writer;
     /**
      * 생성자
