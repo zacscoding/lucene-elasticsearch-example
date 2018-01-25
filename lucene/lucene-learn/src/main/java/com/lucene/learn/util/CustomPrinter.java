@@ -1,5 +1,8 @@
 package com.lucene.learn.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.PrintStream;
 
 /**
@@ -7,8 +10,18 @@ import java.io.PrintStream;
  * @Date 2018-01-14
  * @GitHub : https://github.com/zacscoding
  */
+
+/**
+ * @author zacconding
+ * @Date 2018-01-14
+ * @GitHub : https://github.com/zacscoding
+ */
 public class CustomPrinter {
+    private static Gson TO_SRING_GSON;
     public static final PrintStream PS = System.out;
+    static {
+        TO_SRING_GSON = new GsonBuilder().serializeNulls().create();
+    }
 
     public static void print(String content) {
         PS.print(content);
@@ -24,6 +37,10 @@ public class CustomPrinter {
 
     public static void println(String content, Object ... args) {
         PS.println(parseContent(content, args));
+    }
+
+    public static String toJSON(Object inst) {
+        return TO_SRING_GSON.toJson(inst);
     }
 
     private static String parseContent(String content, Object[] args) {

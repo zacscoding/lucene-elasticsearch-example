@@ -28,13 +28,12 @@ public class BasicSearchTest extends TestCase {
         System.out.println("## [query] : " + query.toString());
         TopDocs docs = searcher.search(query, 10);
         // 'ant' 검색어에 대한 결과가 있는지 확인
-        assertEquals("Ant in Action",1,docs.totalHits);
+        assertEquals("Ant in Action",1, docs.totalHits);
         
         t = new Term("subject", "junit");
         docs = searcher.search(new TermQuery(t),10);
         // junit 검색에 대한 결과가 2건인지 확인
         assertEquals("Ant in Action," + "JUnit in Action, SecondEdition", 2, docs.totalHits);
-        
        searcher.close();       
        dir.close();        
     }
