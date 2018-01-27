@@ -17,8 +17,10 @@ import java.io.PrintStream;
  * @GitHub : https://github.com/zacscoding
  */
 public class CustomPrinter {
+
     private static Gson TO_SRING_GSON;
     public static final PrintStream PS = System.out;
+
     static {
         TO_SRING_GSON = new GsonBuilder().serializeNulls().create();
     }
@@ -27,15 +29,15 @@ public class CustomPrinter {
         PS.print(content);
     }
 
-    public static void print(String content, Object ... args) {
+    public static void print(String content, Object... args) {
         PS.print(parseContent(content, args));
     }
 
-    public static void  println(String content) {
+    public static void println(String content) {
         PS.println(content);
     }
 
-    public static void println(String content, Object ... args) {
+    public static void println(String content, Object... args) {
         PS.println(parseContent(content, args));
     }
 
@@ -43,8 +45,16 @@ public class CustomPrinter {
         return TO_SRING_GSON.toJson(inst);
     }
 
+    public static String toJsonWithPretty(Object inst) {
+        if(inst == null) {
+            return "null";
+        }
+
+        return new GsonBuilder().serializeNulls().setPrettyPrinting().create().toJson(inst);
+    }
+
     private static String parseContent(String content, Object[] args) {
-        if(args == null || args.length == 0) {
+        if (args == null || args.length == 0) {
             return content;
         }
 
@@ -54,11 +64,11 @@ public class CustomPrinter {
 
         for (int i = 0; i < length; i++) {
             char curChar = content.charAt(i);
-            if ( (content.charAt(i) == '{') && (i+1 < length) && (content.charAt(i + 1) == '}') && (isRange(args, argIdx)) ) {
+            if ((content.charAt(i) == '{') && (i + 1 < length) && (content.charAt(i + 1) == '}') && (isRange(args,
+                argIdx))) {
                 sb.append(args[argIdx++]);
                 i++;
-            }
-            else {
+            } else {
                 sb.append(curChar);
             }
         }
@@ -67,8 +77,9 @@ public class CustomPrinter {
     }
 
     private static boolean isRange(Object[] array, int idx) {
-        if (idx < 0 || array.length <= idx)
+        if (idx < 0 || array.length <= idx) {
             return false;
+        }
         return true;
     }
 }

@@ -20,8 +20,9 @@ import junit.framework.TestCase;
 
 
 public class IndexingTest extends TestCase {
-    protected String[] ids = {"1","2"};
-    protected String[] unindexed = {"Netherlands","Italy"};
+
+    protected String[] ids = {"1", "2"};
+    protected String[] unindexed = {"Netherlands", "Italy"};
     protected String[] unstored = {"Amsterdam has lots of bridges", "Venice has lots of conals"};
     protected String[] text = {"Amsterdam", "Venice"};
 
@@ -33,9 +34,9 @@ public class IndexingTest extends TestCase {
         IndexWriter writer = getWriter();
 
         // create document & add
-        for(int i=0; i<ids.length; i++) {
+        for (int i = 0; i < ids.length; i++) {
             Document doc = new Document();
-            doc.add(new Field("id",ids[i], Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field("id", ids[i], Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.add(new Field("country", unindexed[i], Field.Store.YES, Field.Index.NO));
             doc.add(new Field("contents", unstored[i], Field.Store.NO, Field.Index.ANALYZED));
             doc.add(new Field("city", text[i], Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -48,16 +49,15 @@ public class IndexingTest extends TestCase {
 
     // IndexWriter 객체 생성
     private IndexWriter getWriter() throws IOException {
-
         return new IndexWriter(directory, new WhitespaceAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
     }
 
     protected int getHitCount(String fieldName, String searchString) throws IOException {
         IndexSearcher searcher = new IndexSearcher(directory);
-        Term t = new Term(fieldName,searchString);
+        Term t = new Term(fieldName, searchString);
         Query query = new TermQuery(t);
 
-        int hitCount = TestUtil.hitCount(searcher,query);
+        int hitCount = TestUtil.hitCount(searcher, query);
 
         searcher.close();
 
@@ -86,7 +86,7 @@ public class IndexingTest extends TestCase {
         //
         assertEquals(2, writer.numDocs());
         // 첫번째 문서 삭제
-        writer.deleteDocuments(new Term("id","1"));
+        writer.deleteDocuments(new Term("id", "1"));
         writer.commit();
         // 색인에 삭제된 문서가 있는지 검증
         assertTrue(writer.hasDeletions());
@@ -102,7 +102,7 @@ public class IndexingTest extends TestCase {
         IndexWriter writer = getWriter();
         assertEquals(2, writer.numDocs());
         // 첫번째 문서 삭제
-        writer.deleteDocuments(new Term("id","1"));
+        writer.deleteDocuments(new Term("id", "1"));
         // 최적화
         writer.optimize();
         writer.commit();
@@ -117,7 +117,7 @@ public class IndexingTest extends TestCase {
 
     // test
     public void testUpdate() throws IOException {
-        assertEquals(1, getHitCount("city","Amsterdam"));
+        assertEquals(1, getHitCount("city", "Amsterdam"));
 
         IndexWriter writer = getWriter();
 
@@ -128,10 +128,10 @@ public class IndexingTest extends TestCase {
         doc.add(new Field("city", "Den Haag", Field.Store.YES, Field.Index.ANALYZED));
 
         // delete -> write == update
-        writer.updateDocument(new Term("id","1"), doc);
+        writer.updateDocument(new Term("id", "1"), doc);
         writer.close();
 
-        assertEquals(0, getHitCount("city","Amsterdam"));
-        assertEquals(1, getHitCount("city","Haag"));
+        assertEquals(0, getHitCount("city", "Amsterdam"));
+        assertEquals(1, getHitCount("city", "Haag"));
     }
 }
