@@ -11,12 +11,13 @@ import org.junit.Test;
  * @GitHub : https://github.com/zacscoding
  */
 public class HowToRunner extends AbstractRamDirTest {
+
     @Test
     public void test() {
         System.out.println("test!!!");
     }
 
-    @Override
+
     protected IndexWriter getWriter() throws IOException {
         System.out.println("HowToRunner::getWriter()");
         return new IndexWriter(dir, new WhitespaceAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);

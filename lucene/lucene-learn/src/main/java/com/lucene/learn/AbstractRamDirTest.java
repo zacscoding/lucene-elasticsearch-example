@@ -15,6 +15,7 @@ import org.junit.Before;
  * @GitHub : https://github.com/zacscoding
  */
 public abstract class AbstractRamDirTest {
+
     protected Directory dir;
     protected IndexWriter indexWriter;
     protected IndexSearcher indexSearcher;
@@ -23,40 +24,32 @@ public abstract class AbstractRamDirTest {
     public void setUp() throws Exception {
         System.out.println("AbstractRamDirTest::setUp() is called");
         dir = new RAMDirectory();
-        indexWriter = getWriter();
+        indexWriter = new IndexWriter(dir, new WhitespaceAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
     }
 
     @After
     public void tearDown() {
         System.out.println("AbstractRamDirTest::tearDown() is called");
         try {
-            if(indexWriter != null) {
+            if (indexWriter != null) {
                 indexWriter.close();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
         try {
-            if(indexSearcher != null) {
+            if (indexSearcher != null) {
                 indexSearcher.close();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
         try {
-            if(dir != null) {
+            if (dir != null) {
                 dir.close();
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
 
         }
-    }
-
-    protected IndexWriter getWriter() throws IOException {
-        System.out.println("AbstractRamDirTest::getWriter()");
-        return new IndexWriter(dir, new WhitespaceAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
     }
 }

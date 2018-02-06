@@ -2,6 +2,7 @@ package com.lucene.learn.ch2_index;
 
 import com.lucene.learn.domain.Person;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
@@ -36,6 +37,7 @@ public class indexingTest2 {
     public void setUp() throws Exception {
         directory = new RAMDirectory();
         IndexWriter writer = getWriter();
+        persons = new ArrayList<>();
 
         IntStream.range(1, 11).forEach(i -> {
             Person p = new Person();

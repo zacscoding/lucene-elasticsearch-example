@@ -8,16 +8,19 @@ import lombok.ToString;
 
 /**
  * @author zacconding
- * @Date 2018-01-28
+ * @Date 2018-02-06
  * @GitHub : https://github.com/zacscoding
  */
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class Person {
+@NoArgsConstructor
+public class Email {
 
-    private int age;
-    private String name;
+    private String senderEmail;
+    private String senderName;
+    private String subject;
+    private String body;
+    private String type;
 }
