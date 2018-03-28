@@ -1,0 +1,31 @@
+package org.esdemo.entity;
+
+
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Document(indexName = "sort-test-entity", shards = 1, replicas = 0, refreshInterval = "-1")
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+public class SortTestEntity extends AbstractEntity {
+    @Id
+    private String id;
+
+    @Field(type = FieldType.keyword)
+    private String name;
+
+    @Field(type = FieldType.Integer)
+    private int age;
+
+    @Field(type = FieldType.Integer)
+    private int salary;
+}
