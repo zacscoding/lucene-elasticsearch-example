@@ -7,6 +7,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.entity.Person;
+import org.esdemo.entity.ReceiptEntity;
 import org.esdemo.entity.elastic.EmptyPage;
 import org.esdemo.repository.PersonRepository;
 import org.esdemo.util.SimpleLogger;
@@ -24,6 +25,7 @@ public class TermsAggsTest extends AbstractTestRunner {
     @Autowired
     protected PersonRepository personRepository;
 
+    // FAIL !!! Have to try again!!
     @Test
     public void termsTest() {
         elasticsearchTemplate.deleteIndex(Person.class);
@@ -32,12 +34,12 @@ public class TermsAggsTest extends AbstractTestRunner {
         elasticsearchTemplate.refresh(Person.class);
 
         List<Person> entities = Arrays.asList(
-                new Person(null, "name1", 0),
-                new Person(null, "name2", 0),
-                new Person(null, "name3 name4", 0),
-                new Person(null, "name1", 0),
-                new Person(null, "name1", 0),
-                new Person(null, "name2", 0)
+            new Person(null, "name1", 0),
+            new Person(null, "name2", 0),
+            new Person(null, "name3 name4", 0),
+            new Person(null, "name1", 0),
+            new Person(null, "name1", 0),
+            new Person(null, "name2", 0)
         );
         entities.forEach(p -> {
             personRepository.save(p);
@@ -47,10 +49,10 @@ public class TermsAggsTest extends AbstractTestRunner {
 
         TermsAggregationBuilder aggrBuilder = AggregationBuilders.terms("term_name").field("name");
         SearchQuery query = new NativeSearchQueryBuilder()
-                .withIndices("persons")
-                .withPageable(EmptyPage.INSTANCE)
-                .addAggregation(aggrBuilder)
-                .build();
+            .withIndices("persons")
+            .withPageable(EmptyPage.INSTANCE)
+            .addAggregation(aggrBuilder)
+            .build();
 
         Aggregations aggr = elasticsearchTemplate.query(query, new ResultsExtractor<Aggregations>() {
             @Override
@@ -65,7 +67,34 @@ public class TermsAggsTest extends AbstractTestRunner {
             long docCount = entry.getDocCount();
             SimpleLogger.println("name : {}, doc count : {}", name, docCount);
         }
+    }
 
+    // FAIL !!! Have to try again!!
+    @Test
+    public void multipleFieldsTermsAggsTest() {
+        super.clearIndex(ReceiptEntity.class);
+        // want to find persons in from or to fields
+        List<ReceiptEntity> receipts = Arrays.asList(
+            new ReceiptEntity(null, "person1", "person2", 100),
+            new ReceiptEntity(null, "person1", "person3", 100),
+            new ReceiptEntity(null, "person2", "person1", 100),
+            new ReceiptEntity(null, "person2", "person4", 100),
+            new ReceiptEntity(null, "person3", "person1", 100)
+        );
+
+        super.bulkProcess(receipts);
+
+        TermsAggregationBuilder aggrBuilder = AggregationBuilders.terms("terms_from").field("from");
+
+        SearchQuery query = new NativeSearchQueryBuilder()
+            .withPageable(EmptyPage.INSTANCE)
+            .addAggregation(aggrBuilder).build();
+
+        Aggregations aggr = elasticsearchTemplate.query(query, response -> {
+            SimpleLogger.printJSONPretty(response);
+            return response.getAggregations();
+        });
 
     }
 }
+
