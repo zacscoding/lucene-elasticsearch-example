@@ -1,0 +1,15 @@
+{
+  "resource-mapping": {
+    "properties": {
+      "name": {
+        "type": "keyword"
+      },
+      "salary-in-company": {
+        "type": "keyword"
+      },
+      "text-field": {
+        "type": "text"
+      }
+    }
+  }
+}

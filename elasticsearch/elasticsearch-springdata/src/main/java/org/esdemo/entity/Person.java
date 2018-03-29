@@ -9,28 +9,20 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Document(indexName = "mapping-test", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "persons", type = "person", shards = 1, replicas = 0, refreshInterval = "-1")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class MappingTestEntity {
-
+public class Person {
     @Id
     private String id;
-    private String _index;
 
     @Field(type = FieldType.keyword)
-    private String fieldTypeKeyword;
+    private String name;
 
-    @Field(type = FieldType.text)
-    private String fieldTypeText;
-
-
-
-
-
+    @Field(type = FieldType.Integer)
+    private Integer age;
 }

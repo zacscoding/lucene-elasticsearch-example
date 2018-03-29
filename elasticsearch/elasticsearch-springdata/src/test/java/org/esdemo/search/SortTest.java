@@ -4,8 +4,10 @@ import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.entity.SortTestEntity;
+import org.esdemo.repository.SortTestRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -15,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SortTest extends AbstractTestRunner {
+    @Autowired
+    SortTestRepository sortTestRepository;
 
     List<SortTestEntity> entities;
 

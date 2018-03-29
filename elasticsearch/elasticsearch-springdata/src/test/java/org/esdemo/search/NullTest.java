@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class NullTest extends AbstractTestRunner {
 
     @Autowired
-    NullTestRepository nullTestRepository;
+    protected NullTestRepository nullTestRepository;
 
     @Before
     public void setUp() {
@@ -32,6 +32,25 @@ public class NullTest extends AbstractTestRunner {
         ));
     }
 
+    /*
+    {
+        "query": {
+            "exists" : { "field" : "name" }
+        }
+    }
+    ------------------------------------------------------------------------------
+    {
+        "query" : {
+            "bool" : {
+                "must" : {
+                    "exists" : {"field" : "hobby"}
+                }
+            }
+        }
+    }
+
+
+     */
     @Test
     public void nullSearch() {
         // tag :: search - name is null or not null
@@ -43,9 +62,9 @@ public class NullTest extends AbstractTestRunner {
         assertTrue(results.getTotalElements() == 1L);
         results.forEach(e -> assertTrue(e.getName() == null));
 
-        // search not null
+        // search not null == exist
         searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(new BoolQueryBuilder().must(new ExistsQueryBuilder("name")))
+                .withQuery(new ExistsQueryBuilder("name"))
                 .build();
         results = nullTestRepository.search(searchQuery);
         assertTrue(results.getTotalElements() == 2L);
