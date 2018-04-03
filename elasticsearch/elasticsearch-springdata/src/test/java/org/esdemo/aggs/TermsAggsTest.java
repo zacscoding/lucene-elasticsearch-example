@@ -1,6 +1,12 @@
 package org.esdemo.aggs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.search.MultiMatchQuery.QueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -25,6 +31,43 @@ public class TermsAggsTest extends AbstractTestRunner {
     @Autowired
     protected PersonRepository personRepository;
 
+    @Test
+    public void termsAggs() {
+        super.clearIndex(ReceiptEntity.class);
+
+        // person1 : 1 // person2 : 3 // person3 : 3 // person4 : 1 // person5 : 2
+        List<ReceiptEntity> receiptEntities = Arrays.asList(
+          new ReceiptEntity(null, "person1", "person2", 1),
+            new ReceiptEntity(null, "person2", "person3", 1),
+            new ReceiptEntity(null, "person3", "person4", 1),
+            new ReceiptEntity(null, "person3", "person5", 1),
+            new ReceiptEntity(null, "person2", "person5", 1)
+        );
+        Map<String, Integer> docCountMap = new HashMap<>();
+        docCountMap.put("person1", 1);
+        docCountMap.put("person2", 3);
+        docCountMap.put("person3", 1);
+        docCountMap.put("person4", 1);
+        docCountMap.put("person5", 2);
+
+        // QueryBuilder queryBuilder = new BoolQueryBuilder().should(new TermsQueryBuilder("from", "person1", "person2", "person"))
+        /*SearchQuery searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(new TermsQueryBuilder())*/
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    // tag :: failures..
     // FAIL !!! Have to try again!!
     @Test
     public void termsTest() {
@@ -94,7 +137,6 @@ public class TermsAggsTest extends AbstractTestRunner {
             SimpleLogger.printJSONPretty(response);
             return response.getAggregations();
         });
-
     }
 }
 

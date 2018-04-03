@@ -1,4 +1,4 @@
-package org.esdemo.search;
+package org.esdemo.save.mapping;
 
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class MappingTest extends AbstractTestRunner {
+public class MappingKeywordTest extends AbstractTestRunner {
 
     @Autowired
     protected MappingTestRepository mappingTestRepository;
@@ -33,7 +33,7 @@ public class MappingTest extends AbstractTestRunner {
         // elasticsearchTemplate.createIndex(MappingTestEntity.class);
 
         List<MappingTestEntity> entities = Arrays.asList(
-                new MappingTestEntity(null, null, "sample text", "sample text")
+            MappingTestEntity.builder().fieldTypeKeyword("sample text").fieldTypeText("sample text").build()
         );
 
         mappingTestRepository.saveAll(entities);

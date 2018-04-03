@@ -3,6 +3,8 @@ package org.esdemo.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -106,6 +108,19 @@ public class SimpleLogger {
 
     public static String toJsonWithPretty(Object inst) {
         return toJson(new GsonBuilder().setPrettyPrinting().create(), inst);
+    }
+
+    public static String getPrettyStringFromJsonValue(String jsonValue) {
+        if (jsonValue == null || jsonValue.length() == 0) {
+            return "";
+        }
+
+        JsonObject json = new JsonParser().parse(jsonValue).getAsJsonObject();
+        return toJsonWithPretty(json);
+    }
+
+    public static void printPrettyFromJsonValue(String jsonValue) {
+        PS.println(getPrettyStringFromJsonValue(jsonValue));
     }
 
     public static void printJSON(Object inst) {
@@ -249,9 +264,8 @@ public class SimpleLogger {
         // this is append..this is appendln...
         // arg1 : 1, not arg1 : { , arg2 : test, not arg2 : }
         // after new line..
-        SimpleLogger.build().append("this is append..").appendln("this is appendln...")
-                .append("arg1 : {}, not arg1 : { , arg2 : {}, not arg2 : }", 1, "test").newLine()
-                .appendln("after new line..").flush();
+        SimpleLogger.build().append("this is append..").appendln("this is appendln...").append("arg1 : {}, not arg1 : { , arg2 : {}, not arg2 : }", 1, "test").newLine().appendln("after new line..")
+                    .flush();
 
         // tab1	tab2
         SimpleLogger.build().appendTab("tab1").appendln("tab2").flush();

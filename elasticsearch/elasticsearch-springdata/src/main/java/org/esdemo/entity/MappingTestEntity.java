@@ -15,13 +15,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 @Document(indexName = "mapping-test", shards = 1, replicas = 0, refreshInterval = "-1")
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+// @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MappingTestEntity {
 
     @Id
     private String id;
-    private String _index;
 
     @Field(type = FieldType.keyword)
     private String fieldTypeKeyword;
@@ -29,8 +29,6 @@ public class MappingTestEntity {
     @Field(type = FieldType.text)
     private String fieldTypeText;
 
-
-
-
-
+    @Field(type= FieldType.keyword, index = false)
+    private String fieldTypeKeywordAndNoIndex;
 }

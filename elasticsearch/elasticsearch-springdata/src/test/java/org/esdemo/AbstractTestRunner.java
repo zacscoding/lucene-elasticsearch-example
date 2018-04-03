@@ -33,7 +33,7 @@ public class AbstractTestRunner {
     @Autowired
     protected Client client;
 
-    @Before
+    //@Before
     public void setUp() {
 
     }
@@ -65,7 +65,7 @@ public class AbstractTestRunner {
             public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
                 SimpleLogger.error("@@ failed to bulk", failure);
             }
-        }).setBulkActions(1000).setConcurrentRequests(0).build();
+        }).setBulkActions(entities.size()).setConcurrentRequests(0).build();
 
         Class<?> clazz = entities.get(0).getClass();
         Pair<String, String> indexAndType = getIndexAndType(clazz);
@@ -94,8 +94,8 @@ public class AbstractTestRunner {
 
         // Refresh indices
         client.admin().indices().prepareRefresh(indexAndType.getFirst()).get();
-
         bulkProcessor.flush();
+
 //        //bulkProcessor.close();
 //        SimpleLogger.info("Start to await close..");
 //        try {
