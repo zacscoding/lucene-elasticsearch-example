@@ -1,0 +1,540 @@
+## Display BulkItemResponse[] (== response.getItems())
+========================================Result : false========================================
+{
+  "id": 0,
+  "opType": "INDEX",
+  "response": {
+    "shardId": {
+      "index": {
+        "name": "bulk-request-test",
+        "uuid": "j1n8FZS3RHGRfGTkbi6MPw"
+      },
+      "shardId": 0,
+      "hashCode": -149585784
+    },
+    "id": "AWKME8fM29Gp5YdbW-gc",
+    "type": "test",
+    "version": 1,
+    "forcedRefresh": false,
+    "result": "CREATED",
+    "shardInfo": {
+      "total": 1,
+      "successful": 1,
+      "failures": []
+    }
+  }
+}
+================================================================================
+========================================Result : true========================================
+{
+  "id": 1,
+  "opType": "INDEX",
+  "failure": {
+    "index": "bulk-request-test",
+    "type": "test",
+    "id": "AWKME8fM29Gp5YdbW-gd",
+    "cause": {
+      "metadata": {},
+      "headers": {},
+      "detailMessage": "failed to parse [testField]",
+      "cause": {
+        "detailMessage": "For input string: \"sss\"",
+        "stackTrace": [
+          {
+            "declaringClass": "sun.misc.FloatingDecimal",
+            "methodName": "readJavaFormatString",
+            "fileName": "FloatingDecimal.java",
+            "lineNumber": 2043
+          },
+          {
+            "declaringClass": "sun.misc.FloatingDecimal",
+            "methodName": "parseDouble",
+            "fileName": "FloatingDecimal.java",
+            "lineNumber": 110
+          },
+          {
+            "declaringClass": "java.lang.Double",
+            "methodName": "parseDouble",
+            "fileName": "Double.java",
+            "lineNumber": 538
+          },
+          {
+            "declaringClass": "org.elasticsearch.common.xcontent.support.AbstractXContentParser",
+            "methodName": "intValue",
+            "fileName": "AbstractXContentParser.java",
+            "lineNumber": 163
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.NumberFieldMapper$NumberType$6",
+            "methodName": "parse",
+            "fileName": "NumberFieldMapper.java",
+            "lineNumber": 600
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.NumberFieldMapper$NumberType$6",
+            "methodName": "parse",
+            "fileName": "NumberFieldMapper.java",
+            "lineNumber": 579
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.NumberFieldMapper",
+            "methodName": "parseCreateField",
+            "fileName": "NumberFieldMapper.java",
+            "lineNumber": 1072
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.FieldMapper",
+            "methodName": "parse",
+            "fileName": "FieldMapper.java",
+            "lineNumber": 287
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "parseObjectOrField",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 468
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "parseValue",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 591
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "innerParseObject",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 396
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "parseObjectOrNested",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 373
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "internalParseDocument",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 93
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+            "methodName": "parseDocument",
+            "fileName": "DocumentParser.java",
+            "lineNumber": 66
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.mapper.DocumentMapper",
+            "methodName": "parse",
+            "fileName": "DocumentMapper.java",
+            "lineNumber": 277
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+            "methodName": "prepareIndex",
+            "fileName": "IndexShard.java",
+            "lineNumber": 530
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+            "methodName": "prepareIndexOnPrimary",
+            "fileName": "IndexShard.java",
+            "lineNumber": 507
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+            "methodName": "prepareIndexOperationOnPrimary",
+            "fileName": "TransportShardBulkAction.java",
+            "lineNumber": 459
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+            "methodName": "executeIndexRequestOnPrimary",
+            "fileName": "TransportShardBulkAction.java",
+            "lineNumber": 467
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+            "methodName": "executeBulkItemRequest",
+            "fileName": "TransportShardBulkAction.java",
+            "lineNumber": 146
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+            "methodName": "shardOperationOnPrimary",
+            "fileName": "TransportShardBulkAction.java",
+            "lineNumber": 115
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+            "methodName": "shardOperationOnPrimary",
+            "fileName": "TransportShardBulkAction.java",
+            "lineNumber": 70
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryShardReference",
+            "methodName": "perform",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 975
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryShardReference",
+            "methodName": "perform",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 944
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.ReplicationOperation",
+            "methodName": "execute",
+            "fileName": "ReplicationOperation.java",
+            "lineNumber": 113
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+            "methodName": "onResponse",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 345
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+            "methodName": "onResponse",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 270
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$1",
+            "methodName": "onResponse",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 924
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$1",
+            "methodName": "onResponse",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 921
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.shard.IndexShardOperationsLock",
+            "methodName": "acquire",
+            "fileName": "IndexShardOperationsLock.java",
+            "lineNumber": 151
+          },
+          {
+            "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+            "methodName": "acquirePrimaryOperationLock",
+            "fileName": "IndexShard.java",
+            "lineNumber": 1659
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction",
+            "methodName": "acquirePrimaryShardReference",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 933
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction",
+            "methodName": "access$500",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 92
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+            "methodName": "doRun",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 291
+          },
+          {
+            "declaringClass": "org.elasticsearch.common.util.concurrent.AbstractRunnable",
+            "methodName": "run",
+            "fileName": "AbstractRunnable.java",
+            "lineNumber": 37
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryOperationTransportHandler",
+            "methodName": "messageReceived",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 266
+          },
+          {
+            "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryOperationTransportHandler",
+            "methodName": "messageReceived",
+            "fileName": "TransportReplicationAction.java",
+            "lineNumber": 248
+          },
+          {
+            "declaringClass": "org.elasticsearch.transport.RequestHandlerRegistry",
+            "methodName": "processMessageReceived",
+            "fileName": "RequestHandlerRegistry.java",
+            "lineNumber": 69
+          },
+          {
+            "declaringClass": "org.elasticsearch.transport.TransportService$7",
+            "methodName": "doRun",
+            "fileName": "TransportService.java",
+            "lineNumber": 654
+          },
+          {
+            "declaringClass": "org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable",
+            "methodName": "doRun",
+            "fileName": "ThreadContext.java",
+            "lineNumber": 674
+          },
+          {
+            "declaringClass": "org.elasticsearch.common.util.concurrent.AbstractRunnable",
+            "methodName": "run",
+            "fileName": "AbstractRunnable.java",
+            "lineNumber": 37
+          },
+          {
+            "declaringClass": "java.util.concurrent.ThreadPoolExecutor",
+            "methodName": "runWorker",
+            "fileName": "ThreadPoolExecutor.java",
+            "lineNumber": 1142
+          },
+          {
+            "declaringClass": "java.util.concurrent.ThreadPoolExecutor$Worker",
+            "methodName": "run",
+            "fileName": "ThreadPoolExecutor.java",
+            "lineNumber": 617
+          },
+          {
+            "declaringClass": "java.lang.Thread",
+            "methodName": "run",
+            "fileName": "Thread.java",
+            "lineNumber": 748
+          }
+        ],
+        "suppressedExceptions": []
+      },
+      "stackTrace": [
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.FieldMapper",
+          "methodName": "parse",
+          "fileName": "FieldMapper.java",
+          "lineNumber": 298
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "parseObjectOrField",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 468
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "parseValue",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 591
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "innerParseObject",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 396
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "parseObjectOrNested",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 373
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "internalParseDocument",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 93
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentParser",
+          "methodName": "parseDocument",
+          "fileName": "DocumentParser.java",
+          "lineNumber": 66
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.mapper.DocumentMapper",
+          "methodName": "parse",
+          "fileName": "DocumentMapper.java",
+          "lineNumber": 277
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+          "methodName": "prepareIndex",
+          "fileName": "IndexShard.java",
+          "lineNumber": 530
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+          "methodName": "prepareIndexOnPrimary",
+          "fileName": "IndexShard.java",
+          "lineNumber": 507
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+          "methodName": "prepareIndexOperationOnPrimary",
+          "fileName": "TransportShardBulkAction.java",
+          "lineNumber": 459
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+          "methodName": "executeIndexRequestOnPrimary",
+          "fileName": "TransportShardBulkAction.java",
+          "lineNumber": 467
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+          "methodName": "executeBulkItemRequest",
+          "fileName": "TransportShardBulkAction.java",
+          "lineNumber": 146
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+          "methodName": "shardOperationOnPrimary",
+          "fileName": "TransportShardBulkAction.java",
+          "lineNumber": 115
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.bulk.TransportShardBulkAction",
+          "methodName": "shardOperationOnPrimary",
+          "fileName": "TransportShardBulkAction.java",
+          "lineNumber": 70
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryShardReference",
+          "methodName": "perform",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 975
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryShardReference",
+          "methodName": "perform",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 944
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.ReplicationOperation",
+          "methodName": "execute",
+          "fileName": "ReplicationOperation.java",
+          "lineNumber": 113
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+          "methodName": "onResponse",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 345
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+          "methodName": "onResponse",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 270
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$1",
+          "methodName": "onResponse",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 924
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$1",
+          "methodName": "onResponse",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 921
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.shard.IndexShardOperationsLock",
+          "methodName": "acquire",
+          "fileName": "IndexShardOperationsLock.java",
+          "lineNumber": 151
+        },
+        {
+          "declaringClass": "org.elasticsearch.index.shard.IndexShard",
+          "methodName": "acquirePrimaryOperationLock",
+          "fileName": "IndexShard.java",
+          "lineNumber": 1659
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction",
+          "methodName": "acquirePrimaryShardReference",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 933
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction",
+          "methodName": "access$500",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 92
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$AsyncPrimaryAction",
+          "methodName": "doRun",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 291
+        },
+        {
+          "declaringClass": "org.elasticsearch.common.util.concurrent.AbstractRunnable",
+          "methodName": "run",
+          "fileName": "AbstractRunnable.java",
+          "lineNumber": 37
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryOperationTransportHandler",
+          "methodName": "messageReceived",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 266
+        },
+        {
+          "declaringClass": "org.elasticsearch.action.support.replication.TransportReplicationAction$PrimaryOperationTransportHandler",
+          "methodName": "messageReceived",
+          "fileName": "TransportReplicationAction.java",
+          "lineNumber": 248
+        },
+        {
+          "declaringClass": "org.elasticsearch.transport.RequestHandlerRegistry",
+          "methodName": "processMessageReceived",
+          "fileName": "RequestHandlerRegistry.java",
+          "lineNumber": 69
+        },
+        {
+          "declaringClass": "org.elasticsearch.transport.TransportService$7",
+          "methodName": "doRun",
+          "fileName": "TransportService.java",
+          "lineNumber": 654
+        },
+        {
+          "declaringClass": "org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable",
+          "methodName": "doRun",
+          "fileName": "ThreadContext.java",
+          "lineNumber": 674
+        },
+        {
+          "declaringClass": "org.elasticsearch.common.util.concurrent.AbstractRunnable",
+          "methodName": "run",
+          "fileName": "AbstractRunnable.java",
+          "lineNumber": 37
+        },
+        {
+          "declaringClass": "java.util.concurrent.ThreadPoolExecutor",
+          "methodName": "runWorker",
+          "fileName": "ThreadPoolExecutor.java",
+          "lineNumber": 1142
+        },
+        {
+          "declaringClass": "java.util.concurrent.ThreadPoolExecutor$Worker",
+          "methodName": "run",
+          "fileName": "ThreadPoolExecutor.java",
+          "lineNumber": 617
+        },
+        {
+          "declaringClass": "java.lang.Thread",
+          "methodName": "run",
+          "fileName": "Thread.java",
+          "lineNumber": 748
+        }
+      ],
+      "suppressedExceptions": []
+    },
+    "status": "BAD_REQUEST",
+    "aborted": false
+  }
+}
+================================================================================

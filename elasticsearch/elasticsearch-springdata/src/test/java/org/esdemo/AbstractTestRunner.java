@@ -3,11 +3,13 @@ package org.esdemo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.esdemo.dto.Pair;
@@ -35,7 +37,6 @@ public class AbstractTestRunner {
 
     //@Before
     public void setUp() {
-
     }
 
     protected void clearIndex(Class<?> clazz) {
@@ -50,22 +51,45 @@ public class AbstractTestRunner {
             return;
         }
 
+        // https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-docs-bulk-processor.html
         BulkProcessor bulkProcessor = BulkProcessor.builder(client, new BulkProcessor.Listener() {
             @Override
             public void beforeBulk(long executionId, BulkRequest request) {
-                SimpleLogger.info("@@ before bulk execution id : {}, request : {}", executionId, request);
+                SimpleLogger.build()
+                            .appendRepeat(20, "===").newLine()
+                            .appendln("beforeBulk.. id : {}", executionId)
+                            .appendln("req::numberOfActions() : {}", request.numberOfActions())
+                            .flush();
             }
 
             @Override
             public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
-                SimpleLogger.info("@@ before bulk execution id : {}, request : {}", executionId, request);
+                SimpleLogger.build()
+                            .appendRepeat(20, "===").newLine()
+                            .appendln("afterBulk.. id : {}", executionId)
+                            .appendln("  req::numberOfActions() : {}", request.numberOfActions())
+                            .appendln("  res::status() : {}", response.status())
+                            .flush();
+                if (response.hasFailures()) {
+                    for (BulkItemResponse item : response.getItems()) {
+                        SimpleLogger.printJSONPretty(item);
+                        if (item.isFailed()) {
+
+                        }
+                    }
+                }
             }
 
             @Override
             public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
-                SimpleLogger.error("@@ failed to bulk", failure);
+                SimpleLogger.build()
+                            .appendRepeat(20, "===").newLine()
+                            .appendln("afterBulk.. id : {}", executionId)
+                            .appendln("req::numberOfActions() : {}", request.numberOfActions())
+                            .appendln("fail::message : {}", failure.getMessage())
+                            .flush();
             }
-        }).setBulkActions(entities.size()).setConcurrentRequests(0).build();
+        }).setBulkActions(entities.size()).setConcurrentRequests(0).setFlushInterval(TimeValue.timeValueSeconds(5L)).build();
 
         Class<?> clazz = entities.get(0).getClass();
         Pair<String, String> indexAndType = getIndexAndType(clazz);
@@ -83,12 +107,12 @@ public class AbstractTestRunner {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        entities.forEach(e -> {
+        entities.forEach(entity -> {
             try {
-                System.out.println(mapper.writeValueAsString(e));
-                bulkProcessor.add(new IndexRequest(indexAndType.getFirst(), indexAndType.getSecond()).source(mapper.writeValueAsBytes(e), XContentType.JSON));
-            } catch (Exception e2) {
-                SimpleLogger.error("Failed to parse json", e2);
+                System.out.println(mapper.writeValueAsString(entity));
+                bulkProcessor.add(new IndexRequest(indexAndType.getFirst(), indexAndType.getSecond()).source(mapper.writeValueAsBytes(entity), XContentType.JSON));
+            } catch (Exception e) {
+                SimpleLogger.error("Failed to parse json", e);
             }
         });
 

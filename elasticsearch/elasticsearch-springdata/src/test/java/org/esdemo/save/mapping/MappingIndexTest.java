@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.entity.MappingTestEntity;
@@ -26,25 +27,28 @@ public class MappingIndexTest extends AbstractTestRunner  {
 
     // test : FieldType(index = true or false)
     @Test
-    public void noIndexTest() {
-        // super.clearIndex(MappingTestEntity.class);
+    public void noIndexTest() throws Exception {
+        super.clearIndex(MappingTestEntity.class);
         List<MappingTestEntity> entities = new ArrayList<>();
         entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1").fieldTypeKeywordAndNoIndex("test1").build());
         entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1 test2").fieldTypeKeywordAndNoIndex("test1 test2").build());
         entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1 test3").fieldTypeKeywordAndNoIndex("test1 test3").build());
-         //super.bulkProcess(entities);
+        super.bulkProcess(entities);
 
-        SearchQuery query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeyword","test1")).build();
-        Page<MappingTestEntity> result = mappingTestRepository.search(query);
-        System.out.println(result.getTotalElements());
-        // assertTrue(result.getTotalElements() == 3L);
+        TimeUnit.MINUTES.sleep(1L);
 
-        query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeywordAndNoIndex","test1")).build();
-        try {
-            result = mappingTestRepository.search(query);
-            fail("Exception occur!!");
-        } catch(Exception e) {
 
-        }
+//        SearchQuery query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeyword","test1")).build();
+//        Page<MappingTestEntity> result = mappingTestRepository.search(query);
+//        System.out.println(result.getTotalElements());
+//        // assertTrue(result.getTotalElements() == 3L);
+//
+//        query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeywordAndNoIndex","test1")).build();
+//        try {
+//            result = mappingTestRepository.search(query);
+//            fail("Exception occur!!");
+//        } catch(Exception e) {
+//
+//        }
     }
 }
