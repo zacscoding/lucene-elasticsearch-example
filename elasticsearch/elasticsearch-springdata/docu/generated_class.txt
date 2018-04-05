@@ -1,0 +1,606 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
+package com.sun.proxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Optional;
+import org.aopalliance.aop.Advice;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.esdemo.repository.MappingTestRepository;
+import org.springframework.aop.Advisor;
+import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.framework.AopConfigException;
+import org.springframework.core.DecoratingProxy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.repository.Repository;
+import org.springframework.transaction.interceptor.TransactionalProxy;
+
+public final class $Proxy79 extends Proxy implements MappingTestRepository, Repository, TransactionalProxy, Advised, DecoratingProxy {
+    private static Method m1;
+    private static Method m13;
+    private static Method m16;
+    private static Method m35;
+    private static Method m40;
+    private static Method m4;
+    private static Method m29;
+    private static Method m5;
+    private static Method m7;
+    private static Method m39;
+    private static Method m26;
+    private static Method m12;
+    private static Method m23;
+    private static Method m42;
+    private static Method m31;
+    private static Method m30;
+    private static Method m0;
+    private static Method m14;
+    private static Method m27;
+    private static Method m8;
+    private static Method m10;
+    private static Method m17;
+    private static Method m32;
+    private static Method m15;
+    private static Method m19;
+    private static Method m41;
+    private static Method m9;
+    private static Method m44;
+    private static Method m22;
+    private static Method m18;
+    private static Method m2;
+    private static Method m20;
+    private static Method m45;
+    private static Method m34;
+    private static Method m46;
+    private static Method m38;
+    private static Method m21;
+    private static Method m24;
+    private static Method m25;
+    private static Method m37;
+    private static Method m6;
+    private static Method m36;
+    private static Method m3;
+    private static Method m11;
+    private static Method m28;
+    private static Method m43;
+    private static Method m33;
+
+    public $Proxy79(InvocationHandler var1) throws  {
+        super(var1);
+    }
+
+    public final boolean equals(Object var1) throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m1, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void delete(Object var1) throws  {
+        try {
+            super.h.invoke(this, m13, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void deleteAll() throws  {
+        try {
+            super.h.invoke(this, m16, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final void addAdvisor(Advisor var1) throws AopConfigException {
+        try {
+            super.h.invoke(this, m35, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final boolean isExposeProxy() throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m40, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Page search(SearchQuery var1) throws  {
+        try {
+            return (Page)super.h.invoke(this, m4, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final boolean isProxyTargetClass() throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m29, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Page search(QueryBuilder var1, Pageable var2) throws  {
+        try {
+            return (Page)super.h.invoke(this, m5, new Object[]{var1, var2});
+        } catch (RuntimeException | Error var4) {
+            throw var4;
+        } catch (Throwable var5) {
+            throw new UndeclaredThrowableException(var5);
+        }
+    }
+
+    public final void refresh() throws  {
+        try {
+            super.h.invoke(this, m7, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final void removeAdvisor(int var1) throws AopConfigException {
+        try {
+            super.h.invoke(this, m39, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Class[] getProxiedInterfaces() throws  {
+        try {
+            return (Class[])super.h.invoke(this, m26, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final long count() throws  {
+        try {
+            return (Long)super.h.invoke(this, m12, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final int indexOf(Advisor var1) throws  {
+        try {
+            return (Integer)super.h.invoke(this, m23, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final TargetSource getTargetSource() throws  {
+        try {
+            return (TargetSource)super.h.invoke(this, m42, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final void addAdvice(int var1, Advice var2) throws AopConfigException {
+        try {
+            super.h.invoke(this, m31, new Object[]{var1, var2});
+        } catch (RuntimeException | Error var4) {
+            throw var4;
+        } catch (Throwable var5) {
+            throw new UndeclaredThrowableException(var5);
+        }
+    }
+
+    public final void addAdvice(Advice var1) throws AopConfigException {
+        try {
+            super.h.invoke(this, m30, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final int hashCode() throws  {
+        try {
+            return (Integer)super.h.invoke(this, m0, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Object save(Object var1) throws  {
+        try {
+            return (Object)super.h.invoke(this, m14, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final boolean isInterfaceProxied(Class var1) throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m27, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Class getEntityClass() throws  {
+        try {
+            return (Class)super.h.invoke(this, m8, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Iterable findAll(Sort var1) throws  {
+        try {
+            return (Iterable)super.h.invoke(this, m10, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Iterable findAll() throws  {
+        try {
+            return (Iterable)super.h.invoke(this, m17, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final boolean removeAdvice(Advice var1) throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m32, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void deleteAll(Iterable var1) throws  {
+        try {
+            super.h.invoke(this, m15, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void deleteById(Object var1) throws  {
+        try {
+            super.h.invoke(this, m19, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void setExposeProxy(boolean var1) throws  {
+        try {
+            super.h.invoke(this, m41, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Page searchSimilar(Object var1, String[] var2, Pageable var3) throws  {
+        try {
+            return (Page)super.h.invoke(this, m9, new Object[]{var1, var2, var3});
+        } catch (RuntimeException | Error var5) {
+            throw var5;
+        } catch (Throwable var6) {
+            throw new UndeclaredThrowableException(var6);
+        }
+    }
+
+    public final void setTargetSource(TargetSource var1) throws  {
+        try {
+            super.h.invoke(this, m44, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final boolean existsById(Object var1) throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m22, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Optional findById(Object var1) throws  {
+        try {
+            return (Optional)super.h.invoke(this, m18, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final String toString() throws  {
+        try {
+            return (String)super.h.invoke(this, m2, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Iterable saveAll(Iterable var1) throws  {
+        try {
+            return (Iterable)super.h.invoke(this, m20, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Class getTargetClass() throws  {
+        try {
+            return (Class)super.h.invoke(this, m45, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final void addAdvisor(int var1, Advisor var2) throws AopConfigException {
+        try {
+            super.h.invoke(this, m34, new Object[]{var1, var2});
+        } catch (RuntimeException | Error var4) {
+            throw var4;
+        } catch (Throwable var5) {
+            throw new UndeclaredThrowableException(var5);
+        }
+    }
+
+    public final Class getDecoratedClass() throws  {
+        try {
+            return (Class)super.h.invoke(this, m46, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final boolean removeAdvisor(Advisor var1) throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m38, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Iterable findAllById(Iterable var1) throws  {
+        try {
+            return (Iterable)super.h.invoke(this, m21, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final int indexOf(Advice var1) throws  {
+        try {
+            return (Integer)super.h.invoke(this, m24, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final boolean isFrozen() throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m25, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final boolean replaceAdvisor(Advisor var1, Advisor var2) throws AopConfigException {
+        try {
+            return (Boolean)super.h.invoke(this, m37, new Object[]{var1, var2});
+        } catch (RuntimeException | Error var4) {
+            throw var4;
+        } catch (Throwable var5) {
+            throw new UndeclaredThrowableException(var5);
+        }
+    }
+
+    public final Iterable search(QueryBuilder var1) throws  {
+        try {
+            return (Iterable)super.h.invoke(this, m6, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final void setPreFiltered(boolean var1) throws  {
+        try {
+            super.h.invoke(this, m36, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Object index(Object var1) throws  {
+        try {
+            return (Object)super.h.invoke(this, m3, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final Page findAll(Pageable var1) throws  {
+        try {
+            return (Page)super.h.invoke(this, m11, new Object[]{var1});
+        } catch (RuntimeException | Error var3) {
+            throw var3;
+        } catch (Throwable var4) {
+            throw new UndeclaredThrowableException(var4);
+        }
+    }
+
+    public final String toProxyConfigString() throws  {
+        try {
+            return (String)super.h.invoke(this, m28, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final Advisor[] getAdvisors() throws  {
+        try {
+            return (Advisor[])super.h.invoke(this, m43, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    public final boolean isPreFiltered() throws  {
+        try {
+            return (Boolean)super.h.invoke(this, m33, (Object[])null);
+        } catch (RuntimeException | Error var2) {
+            throw var2;
+        } catch (Throwable var3) {
+            throw new UndeclaredThrowableException(var3);
+        }
+    }
+
+    static {
+        try {
+            m1 = Class.forName("java.lang.Object").getMethod("equals", Class.forName("java.lang.Object"));
+            m13 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("delete", Class.forName("java.lang.Object"));
+            m16 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("deleteAll");
+            m35 = Class.forName("org.springframework.aop.framework.Advised").getMethod("addAdvisor", Class.forName("org.springframework.aop.Advisor"));
+            m40 = Class.forName("org.springframework.aop.framework.Advised").getMethod("isExposeProxy");
+            m4 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("search", Class.forName("org.springframework.data.elasticsearch.core.query.SearchQuery"));
+            m29 = Class.forName("org.springframework.aop.framework.Advised").getMethod("isProxyTargetClass");
+            m5 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("search", Class.forName("org.elasticsearch.index.query.QueryBuilder"), Class.forName("org.springframework.data.domain.Pageable"));
+            m7 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("refresh");
+            m39 = Class.forName("org.springframework.aop.framework.Advised").getMethod("removeAdvisor", Integer.TYPE);
+            m26 = Class.forName("org.springframework.aop.framework.Advised").getMethod("getProxiedInterfaces");
+            m12 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("count");
+            m23 = Class.forName("org.springframework.aop.framework.Advised").getMethod("indexOf", Class.forName("org.springframework.aop.Advisor"));
+            m42 = Class.forName("org.springframework.aop.framework.Advised").getMethod("getTargetSource");
+            m31 = Class.forName("org.springframework.aop.framework.Advised").getMethod("addAdvice", Integer.TYPE, Class.forName("org.aopalliance.aop.Advice"));
+            m30 = Class.forName("org.springframework.aop.framework.Advised").getMethod("addAdvice", Class.forName("org.aopalliance.aop.Advice"));
+            m0 = Class.forName("java.lang.Object").getMethod("hashCode");
+            m14 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("save", Class.forName("java.lang.Object"));
+            m27 = Class.forName("org.springframework.aop.framework.Advised").getMethod("isInterfaceProxied", Class.forName("java.lang.Class"));
+            m8 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("getEntityClass");
+            m10 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("findAll", Class.forName("org.springframework.data.domain.Sort"));
+            m17 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("findAll");
+            m32 = Class.forName("org.springframework.aop.framework.Advised").getMethod("removeAdvice", Class.forName("org.aopalliance.aop.Advice"));
+            m15 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("deleteAll", Class.forName("java.lang.Iterable"));
+            m19 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("deleteById", Class.forName("java.lang.Object"));
+            m41 = Class.forName("org.springframework.aop.framework.Advised").getMethod("setExposeProxy", Boolean.TYPE);
+            m9 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("searchSimilar", Class.forName("java.lang.Object"), Class.forName("[Ljava.lang.String;"), Class.forName("org.springframework.data.domain.Pageable"));
+            m44 = Class.forName("org.springframework.aop.framework.Advised").getMethod("setTargetSource", Class.forName("org.springframework.aop.TargetSource"));
+            m22 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("existsById", Class.forName("java.lang.Object"));
+            m18 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("findById", Class.forName("java.lang.Object"));
+            m2 = Class.forName("java.lang.Object").getMethod("toString");
+            m20 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("saveAll", Class.forName("java.lang.Iterable"));
+            m45 = Class.forName("org.springframework.aop.framework.Advised").getMethod("getTargetClass");
+            m34 = Class.forName("org.springframework.aop.framework.Advised").getMethod("addAdvisor", Integer.TYPE, Class.forName("org.springframework.aop.Advisor"));
+            m46 = Class.forName("org.springframework.core.DecoratingProxy").getMethod("getDecoratedClass");
+            m38 = Class.forName("org.springframework.aop.framework.Advised").getMethod("removeAdvisor", Class.forName("org.springframework.aop.Advisor"));
+            m21 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("findAllById", Class.forName("java.lang.Iterable"));
+            m24 = Class.forName("org.springframework.aop.framework.Advised").getMethod("indexOf", Class.forName("org.aopalliance.aop.Advice"));
+            m25 = Class.forName("org.springframework.aop.framework.Advised").getMethod("isFrozen");
+            m37 = Class.forName("org.springframework.aop.framework.Advised").getMethod("replaceAdvisor", Class.forName("org.springframework.aop.Advisor"), Class.forName("org.springframework.aop.Advisor"));
+            m6 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("search", Class.forName("org.elasticsearch.index.query.QueryBuilder"));
+            m36 = Class.forName("org.springframework.aop.framework.Advised").getMethod("setPreFiltered", Boolean.TYPE);
+            m3 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("index", Class.forName("java.lang.Object"));
+            m11 = Class.forName("org.esdemo.repository.MappingTestRepository").getMethod("findAll", Class.forName("org.springframework.data.domain.Pageable"));
+            m28 = Class.forName("org.springframework.aop.framework.Advised").getMethod("toProxyConfigString");
+            m43 = Class.forName("org.springframework.aop.framework.Advised").getMethod("getAdvisors");
+            m33 = Class.forName("org.springframework.aop.framework.Advised").getMethod("isPreFiltered");
+        } catch (NoSuchMethodException var2) {
+            throw new NoSuchMethodError(var2.getMessage());
+        } catch (ClassNotFoundException var3) {
+            throw new NoClassDefFoundError(var3.getMessage());
+        }
+    }
+}

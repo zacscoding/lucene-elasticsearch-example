@@ -1,5 +1,12 @@
 package org.esdemo.save;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -9,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.elasticsearch.action.DocWriteRequest;
+import org.elasticsearch.action.DocWriteRequest.OpType;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
@@ -19,16 +26,20 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.IdsQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.dto.Counter;
 import org.esdemo.util.SimpleLogger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.GetQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 
@@ -154,13 +165,85 @@ public class BulkRequestTest extends AbstractTestRunner {
     }
 
     @Test
-    public void test() {
+    public void sameIdAndCatchException() throws Exception {
+        BulkProcessor bulkProcessor = BulkProcessor.builder(client, new Listener() {
+            @Override
+            public void beforeBulk(long executionId, BulkRequest request) {
+                SimpleLogger.info("[## Before bulk] execution id : {}, number of actions : {}", executionId, request.numberOfActions());
+            }
+
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+                SimpleLogger.info("[## After bulk] execution id : {}, number of actions : {}, has fail : {}",
+                    executionId, request.numberOfActions(), response.hasFailures());
+                for (BulkItemResponse item : response.getItems()) {
+                    if (item.isFailed()) {
+                        System.out.println("## check fail : " + item.getFailure().getCause().getClass().getName());
+                        // SimpleLogger.printJSONPretty(item);
+                    }
+                }
+            }
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+                SimpleLogger.println("[## After bulk with throwable] execution id : {}, number of actions : {}, message : {}"
+                    , executionId, request.numberOfActions(), failure.getMessage());
+                System.out.println(failure.getClass().getName());
+            }
+        }).setBulkActions(3).setFlushInterval(new TimeValue(1L, TimeUnit.SECONDS)).setConcurrentRequests(0).build();
+
+        /**     Will be updated testField : 2 -> 3   */
+
+//        super.clearIndex(BulkRequestEntity.class);
+//        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("1").testField(1).build()));
+//        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("2").testField(2).build()));
+//        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("2").testField(3).build()));
+//        client.admin().indices().prepareRefresh("bulk-request-test").get();
+//        bulkProcessor.flush();
+//        TimeUnit.SECONDS.sleep(2L);
+//
+//        BulkRequestEntity e1 = findOneById("2");
+//        assertTrue(e1.getTestField() == 3);
+
+        // ===============================================================================================================
+
+        super.clearIndex(BulkRequestEntity.class);
+        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("1").testField(1).build()).opType(OpType.CREATE));
+        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("2").testField(2).build()).opType(OpType.CREATE));
+        bulkProcessor.add(getIndexRequest(BulkRequestEntity.builder().id("2").testField(3).build()).opType(OpType.CREATE));
         client.admin().indices().prepareRefresh("bulk-request-test").get();
+        bulkProcessor.flush();
+        TimeUnit.SECONDS.sleep(1L);
+        BulkRequestEntity e2 = findOneById("2");
+        assertTrue(e2.getTestField() == 2);
+    }
+
+    public BulkRequestEntity findOneById(String id) {
+        GetQuery getQuery = new GetQuery();
+        getQuery.setId(id);
+        return elasticsearchTemplate.queryForObject(getQuery , BulkRequestEntity.class);
+    }
+
+    @Test
+    @Ignore
+    public void testSearch() {
+
+
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(new IdsQueryBuilder().addIds("2","3"))
+            .build();
+        Page<BulkRequestEntity> pages = elasticsearchTemplate.queryForPage(searchQuery, BulkRequestEntity.class);
+        System.out.println(pages.getTotalElements());
     }
 
     private IndexRequest getIndexRequest() throws Exception {
+        return getIndexRequest(getEntity());
+    }
+
+    private IndexRequest getIndexRequest(BulkRequestEntity e) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        return new IndexRequest("bulk-request-test", "test").source(mapper.writeValueAsBytes(getEntity()), XContentType.JSON);
+        String id = e.getId();
+        e.setId(null);
+        return new IndexRequest("bulk-request-test", "test").id(id).source(mapper.writeValueAsBytes(e), XContentType.JSON);
     }
 
     private BulkRequestEntity getEntity() {
@@ -174,7 +257,8 @@ public class BulkRequestTest extends AbstractTestRunner {
 @AllArgsConstructor
 @ToString
 @Builder
-@Document(indexName = "bulk-request-test", type="test", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "bulk-request-test", type="test", shards = 1, replicas = 0, refreshInterval = "1s")
+@JsonIgnoreProperties({"id"})
 class BulkRequestEntity {
     @Id
     private String id;
@@ -182,4 +266,3 @@ class BulkRequestEntity {
     @Field(type = FieldType.Integer)
     private int testField;
 }
-
