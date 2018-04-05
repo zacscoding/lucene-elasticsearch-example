@@ -43,8 +43,18 @@ public class SimpleLogger {
     }
 
     public static void info(String message, Object... args) {
-        String prefix = SIMPLE_DATE_FORMAT.format(new Date()) + " : " + getClassName() + " ";
-        println(prefix + message, args);
+        long now = System.currentTimeMillis();
+        StringBuilder sb = new StringBuilder(100 + (message == null ? 0 : message.length()));
+        sb.append('[').append(SIMPLE_DATE_FORMAT.format(new Date(now))).append("   INFO");
+
+        boolean displayThread = false;
+        if (displayThread) {
+            Thread thread = Thread.currentThread();
+            sb.append(thread.getId()).append(' ').append(thread.getName());
+        }
+
+        sb.append("] : ").append(getClassName()).append(' ').append(message);
+        println(sb.toString(), args);
     }
 
     public static void error(Throwable t) {
@@ -242,7 +252,7 @@ public class SimpleLogger {
     /**
      * Simple Test from console...
      */
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         // this is print...this is println...
         SimpleLogger.print("this is print...");
         SimpleLogger.println("this is println...");

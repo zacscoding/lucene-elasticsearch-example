@@ -13,6 +13,7 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.esdemo.dto.Pair;
+import org.esdemo.elastic.ElasticsearchTemplateService;
 import org.esdemo.entity.ReceiptEntity;
 import org.esdemo.repository.*;
 import org.esdemo.util.SimpleLogger;
@@ -30,7 +31,7 @@ import org.springframework.util.StringUtils;
 public class AbstractTestRunner {
 
     @Autowired
-    protected ElasticsearchTemplate elasticsearchTemplate;
+    protected ElasticsearchTemplateService elasticsearchTemplate;
 
     @Autowired
     protected Client client;
