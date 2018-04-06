@@ -1,5 +1,6 @@
 package org.esdemo.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.client.Client;
 import org.esdemo.elastic.ElasticsearchTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,10 @@ public class ElasticsearchConfiguration {
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate() {
         return new ElasticsearchTemplateService(client);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

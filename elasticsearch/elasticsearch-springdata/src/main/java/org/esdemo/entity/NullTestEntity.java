@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Document(indexName = "null-test-entity", shards = 1, replicas = 0, refreshInterval = "-1")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class NullTestEntity extends AbstractEntity {

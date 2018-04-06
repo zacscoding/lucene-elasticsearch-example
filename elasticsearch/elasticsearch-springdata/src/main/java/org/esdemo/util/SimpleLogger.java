@@ -69,6 +69,12 @@ public class SimpleLogger {
         }
     }
 
+    public static void printTitle(String message, Object ... args) {
+        print("## ======================  ");
+        print(message, args);
+        println("  ======================##");
+    }
+
     public static String getStackTraceString(int cursor) {
         StackTraceElement[] elts = Thread.currentThread().getStackTrace();
         if (elts == null || elts.length == 1) {

@@ -2,27 +2,25 @@ package org.esdemo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.esdemo.dto.Pair;
 import org.esdemo.elastic.ElasticsearchTemplateService;
-import org.esdemo.entity.ReceiptEntity;
-import org.esdemo.repository.*;
+import org.esdemo.util.ReflectionUtil;
 import org.esdemo.util.SimpleLogger;
-import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.mapping.ElasticsearchPersistentEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
@@ -36,6 +34,9 @@ public class AbstractTestRunner {
     @Autowired
     protected Client client;
 
+    @Autowired
+    protected ObjectMapper objectMapper;
+
     //@Before
     public void setUp() {
     }
@@ -45,6 +46,24 @@ public class AbstractTestRunner {
         elasticsearchTemplate.createIndex(clazz);
         elasticsearchTemplate.putMapping(clazz);
         elasticsearchTemplate.refresh(clazz);
+    }
+
+    protected <T> boolean save(T inst) {
+        if(inst == null) {
+            return false;
+        }
+
+        ElasticsearchPersistentEntity<T> persistentEntity = elasticsearchTemplate.getPersistentEntityFor(inst.getClass());
+
+        try {
+            IndexResponse response = elasticsearchTemplate.getClient().prepareIndex(persistentEntity.getIndexName(), persistentEntity.getIndexType())
+                                                           .setId(ReflectionUtil.getSpringDataId(inst))
+                                                           .setSource(objectMapper.writeValueAsBytes(inst), XContentType.JSON)
+                                                           .get();
+            return response.status().getStatus() == 201;
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     protected <T> void bulkProcess(List<T> entities) {
@@ -120,16 +139,9 @@ public class AbstractTestRunner {
         // Refresh indices
         client.admin().indices().prepareRefresh(indexAndType.getFirst()).get();
         bulkProcessor.flush();
-
-//        //bulkProcessor.close();
-//        SimpleLogger.info("Start to await close..");
-//        try {
-//            bulkProcessor.awaitClose(5L, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            bulkProcessor.close();
-//        }
-//        SimpleLogger.info("End bulk process");
+        // bulkProcessor.awaitClose(5L, TimeUnit.SECONDS);
+        // bulkProcessor.close();
+        //bulkProcessor.close();
     }
 
     private Pair<String, String> getIndexAndType(Class<?> clazz) {

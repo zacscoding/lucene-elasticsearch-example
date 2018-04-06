@@ -1,6 +1,8 @@
 package org.esdemo.util;
 
 import org.esdemo.entity.AbstractEntity;
+import org.esdemo.entity.NullTestEntity;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.lang.annotation.Annotation;
@@ -9,6 +11,27 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 public class ReflectionUtil {
+
+    public static <T> String getSpringDataId(T inst) {
+        if (inst == null) {
+            return null;
+        }
+
+        try {
+            Field[] fields = inst.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(Id.class)) {
+                    field.setAccessible(true);
+                    if (field.getType() == String.class) {
+                        return (String) field.get(inst);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+        return null;
+    }
 
     public static boolean modifyAnnotationValue(Class<?> target, Class<? extends Annotation> targetAnnotation, Annotation targetValue) {
         try {
