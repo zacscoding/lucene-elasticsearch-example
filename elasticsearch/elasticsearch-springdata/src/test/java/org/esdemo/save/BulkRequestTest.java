@@ -19,6 +19,7 @@ import lombok.ToString;
 import org.elasticsearch.action.DocWriteRequest.OpType;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
+import org.elasticsearch.action.bulk.BulkItemResponse.Failure;
 import org.elasticsearch.action.bulk.BulkProcessor;
 import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -178,7 +179,18 @@ public class BulkRequestTest extends AbstractTestRunner {
                     executionId, request.numberOfActions(), response.hasFailures());
                 for (BulkItemResponse item : response.getItems()) {
                     if (item.isFailed()) {
-                        System.out.println("## check fail : " + item.getFailure().getCause().getClass().getName());
+                        // ## check fail
+                        Failure failure =  item.getFailure();
+                        SimpleLogger.build()
+                                    .appendln("id : " + failure.getId())
+                                    .appendln("message : " + failure.getMessage())
+                                    .appendln("status name : " + failure.getStatus().name())
+                                    .appendln("status : " + failure.getStatus().getStatus())
+                                    .appendln("cause class : " + failure.getCause().getClass().getName())
+                                    .flush();
+                        SimpleLogger.println("", failure.getId());
+                        SimpleLogger.printJSONPretty(item.getFailure());
+                        // System.out.println("## check fail : " + item.getFailure().getCause().getClass().getName());
                         // SimpleLogger.printJSONPretty(item);
                     }
                 }

@@ -23,20 +23,20 @@ public class FrontController {
 
     @GetMapping("/")
     public String test() throws Exception {
-        String className = repository.getClass().getName();
-        System.out.println("## check " + className);
-        ClassLoader loader = MappingTestRepository.class.getClassLoader();
-        ClassReader cr = new ClassReader(loader.getResourceAsStream(className.replace('.', '/') + ".class"));
-        ClassWriter cw = new ClassWriter(cr, 0);
-        cr.accept(new ClassVisitor(Opcodes.ASM5) {
-            @Override
-            public void visitSource(String s, String s1) {
-                super.visitSource(s, s1);
-            }
-        },0);
-
-        byte[] bytes = cw.toByteArray();
-        ClassFileDumpUtil.writeByteCode(bytes, new File("D:\test", className + ".class"));
+//        String className = repository.getClass().getName();
+//        System.out.println("## check " + className);
+//        ClassLoader loader = MappingTestRepository.class.getClassLoader();
+//        ClassReader cr = new ClassReader(loader.getResourceAsStream(className.replace('.', '/') + ".class"));
+//        ClassWriter cw = new ClassWriter(cr, 0);
+//        cr.accept(new ClassVisitor(Opcodes.ASM5) {
+//            @Override
+//            public void visitSource(String s, String s1) {
+//                super.visitSource(s, s1);
+//            }
+//        },0);
+//
+//        byte[] bytes = cw.toByteArray();
+//        ClassFileDumpUtil.writeByteCode(bytes, new File("D:\test", className + ".class"));
         return "test";
     }
 
