@@ -1,0 +1,11 @@
+{
+  "test": {
+    "properties": {
+      "keyword": {
+        "type": "keyword",
+        "index": false,
+        "analyzer" : "whitespace"
+      }
+    }
+  }
+}

@@ -128,6 +128,18 @@ public class UpdateRequestTest extends AbstractTestRunner {
         UpdateRequestTestEntity entity = elasticsearchTemplate.queryForObject(getQuery, UpdateRequestTestEntity.class);
         assertThat(entity.getName(), is("name2"));
     }
+
+    @Test
+    public void displayUpdateRequest() throws Exception {
+        UpdateRequestTestEntity e1 = UpdateRequestTestEntity.builder().id("test1").name("name").age(1).build();
+        assertTrue(super.save(e1));
+        UpdateRequest updateRequest = new UpdateRequest().index(indexName).type(type).id("test1").doc(
+            XContentBuilder.builder(XContentType.JSON.xContent()).startObject().field("name", "name4").endObject());
+        UpdateResponse updateResponse = elasticsearchTemplate.getClient().update(updateRequest).get();
+        SimpleLogger.printTitle("Update Response");
+        SimpleLogger.println("updateResponse.status().getStatus() : " + updateResponse.status().getStatus());
+        SimpleLogger.printJSONPretty(updateResponse);
+    }
 }
 
 

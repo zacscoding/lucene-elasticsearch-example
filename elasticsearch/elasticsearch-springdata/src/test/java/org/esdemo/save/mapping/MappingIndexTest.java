@@ -1,11 +1,15 @@
 package org.esdemo.save.mapping;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.elasticsearch.action.search.SearchPhaseExecutionException;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.entity.MappingTestEntity;
@@ -13,6 +17,7 @@ import org.esdemo.repository.MappingTestRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 
@@ -25,30 +30,34 @@ public class MappingIndexTest extends AbstractTestRunner  {
     @Autowired
     MappingTestRepository mappingTestRepository;
 
-    // test : FieldType(index = true or false)
-    @Test
-    public void noIndexTest() throws Exception {
+    @Test(expected = SearchPhaseExecutionException.class)
+    public void indexFalseAndSearch() {
         super.clearIndex(MappingTestEntity.class);
-        List<MappingTestEntity> entities = new ArrayList<>();
-        entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1").fieldTypeKeywordAndNoIndex("test1").build());
-        entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1 test2").fieldTypeKeywordAndNoIndex("test1 test2").build());
-        entities.add(MappingTestEntity.builder().fieldTypeKeyword("test1 test3").fieldTypeKeywordAndNoIndex("test1 test3").build());
-        super.bulkProcess(entities);
 
-        TimeUnit.MINUTES.sleep(1L);
+        List<MappingTestEntity> entities = Arrays.asList(
+            MappingTestEntity.builder().fieldTypeKeywordAndNoIndex("keyword").fieldTypeTextAndNoIndex("text").build()
+        );
+        mappingTestRepository.saveAll(entities);
 
+        SearchQuery query = new NativeSearchQueryBuilder()
+            .withQuery(new TermQueryBuilder("fieldTypeKeywordAndNoIndex", "keyword"))
+            .build();
+        Page<MappingTestEntity> results = mappingTestRepository.search(query);
+        fail("exception will occur!!");
+    }
 
-//        SearchQuery query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeyword","test1")).build();
-//        Page<MappingTestEntity> result = mappingTestRepository.search(query);
-//        System.out.println(result.getTotalElements());
-//        // assertTrue(result.getTotalElements() == 3L);
-//
-//        query = new NativeSearchQueryBuilder().withQuery(new TermQueryBuilder("fieldTypeKeywordAndNoIndex","test1")).build();
-//        try {
-//            result = mappingTestRepository.search(query);
-//            fail("Exception occur!!");
-//        } catch(Exception e) {
-//
-//        }
+    @Test
+    public void indexFalseIsSaved() {
+        super.clearIndex(MappingTestEntity.class);
+
+        List<MappingTestEntity> entities = Arrays.asList(
+            MappingTestEntity.builder().fieldTypeKeyword("kewword").fieldTypeKeywordAndNoIndex("keywordAndNoIndex").fieldTypeTextAndNoIndex("text text").build()
+        );
+        mappingTestRepository.saveAll(entities);
+        Page<MappingTestEntity> results =  mappingTestRepository.findAll(PageRequest.of(0,10));
+        assertTrue(results.getTotalElements() == 1L);
+        MappingTestEntity find = results.getContent().get(0);
+        assertThat(find.getFieldTypeKeywordAndNoIndex(), is("keywordAndNoIndex"));
+        assertThat(find.getFieldTypeTextAndNoIndex(), is("text text"));
     }
 }

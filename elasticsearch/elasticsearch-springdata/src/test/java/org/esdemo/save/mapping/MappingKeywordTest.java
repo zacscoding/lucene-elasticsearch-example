@@ -21,16 +21,12 @@ public class MappingKeywordTest extends AbstractTestRunner {
     @Autowired
     protected MappingTestRepository mappingTestRepository;
 
-
-    @Test
-    public void test() {
-        System.out.println("init");
-    }
-
     @Test
     public void keywordTest() {
-        // elasticsearchTemplate.deleteIndex(MappingTestEntity.class);
-        // elasticsearchTemplate.createIndex(MappingTestEntity.class);
+        elasticsearchTemplate.deleteIndex(MappingTestEntity.class);
+        elasticsearchTemplate.createIndex(MappingTestEntity.class);
+        elasticsearchTemplate.putMapping(MappingTestEntity.class);
+        elasticsearchTemplate.refresh(MappingTestEntity.class);
 
         List<MappingTestEntity> entities = Arrays.asList(
             MappingTestEntity.builder().fieldTypeKeyword("sample text").fieldTypeText("sample text").build()
@@ -71,5 +67,4 @@ public class MappingKeywordTest extends AbstractTestRunner {
         results = mappingTestRepository.search(query);
         System.out.println("result2 : " + results.getTotalElements());
     }
-
 }

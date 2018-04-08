@@ -1,0 +1,43 @@
+{
+  "test": {
+    "properties": {
+      "fieldTypeKeyword": {
+        "type": "keyword"
+      },
+      "fieldTypeKeywordAndNoIndex": {
+        "type": "keyword",
+        "index": false
+      },
+      "fieldTypeText": {
+        "type": "text"
+      },
+      "fieldTypeTextAndNoIndex": {
+        "type": "text",
+        "index": false
+      },
+      "defaultAnalyzer": {
+        "type": "keyword"
+      },
+      "simpleAnalyzer": {
+        "type": "keyword",
+        "analyzer": "simple"
+      },
+      "whitespaceAnalyzer": {
+        "type": "keyword",
+        "analyzer": "whitespace"
+      },
+      "stopAnalyzer": {
+        "type": "keyword",
+        "analyzer": "stop"
+      },
+      "keywordAnalyzer": {
+        "type": "keyword",
+        "analyzer": "keyword"
+      },
+      "patternAnalyzer": {
+        "type": "keyword",
+        "analyzer": "pattern"
+      }
+    }
+  }
+}

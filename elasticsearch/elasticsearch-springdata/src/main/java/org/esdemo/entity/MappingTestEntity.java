@@ -1,13 +1,17 @@
 package org.esdemo.entity;
 
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Mapping;
 
 
 @Getter
@@ -16,7 +20,8 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @AllArgsConstructor
 @ToString
 @Builder
-@Document(indexName = "mapping-test", shards = 1, replicas = 0, refreshInterval = "-1")
+@Mapping(mappingPath = "/mappings/mapping-test-entity.json")
+@Document(indexName = "mapping-test", type = "test", shards = 1, replicas = 0, refreshInterval = "-1")
 // @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MappingTestEntity {
 
@@ -31,4 +36,28 @@ public class MappingTestEntity {
 
     @Field(type= FieldType.keyword, index = false)
     private String fieldTypeKeywordAndNoIndex;
+
+    @Field(type = FieldType.text, index = false)
+    private String fieldTypeTextAndNoIndex;
+
+    /**
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html
+     */
+    //@Field(type = FieldType.keyword, analyzer = "")
+    private String defaultAnalyzer;
+
+    //@Field(type = FieldType.keyword, analyzer = "simple")
+    private String simpleAnalyzer;
+
+    //@Field(type = FieldType.keyword, analyzer = "whitespace")
+    private String whitespaceAnalyzer;
+
+    //@Field(type = FieldType.keyword, analyzer = "stop")
+    private String stopAnalyzer;
+
+    //@Field(type = FieldType.keyword, analyzer = "keyword")
+    private String keywordAnalyzer;
+
+    //@Field(type = FieldType.keyword, analyzer = "pattern")
+    private String patternAnalyzer;
 }

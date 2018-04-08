@@ -37,11 +37,11 @@ public class TermsAggsTest extends AbstractTestRunner {
 
         // person1 : 1 // person2 : 3 // person3 : 3 // person4 : 1 // person5 : 2
         List<ReceiptEntity> receiptEntities = Arrays.asList(
-          new ReceiptEntity(null, "person1", "person2", 1),
-            new ReceiptEntity(null, "person2", "person3", 1),
-            new ReceiptEntity(null, "person3", "person4", 1),
-            new ReceiptEntity(null, "person3", "person5", 1),
-            new ReceiptEntity(null, "person2", "person5", 1)
+            ReceiptEntity.builder().from("person1").to("person2").price(1).build(),
+            ReceiptEntity.builder().from("person2").to("person3").price(1).build(),
+            ReceiptEntity.builder().from("person3").to("person4").price(1).build(),
+            ReceiptEntity.builder().from("person3").to("person5").price(1).build(),
+            ReceiptEntity.builder().from("person2").to("person5").price(1).build()
         );
         Map<String, Integer> docCountMap = new HashMap<>();
         docCountMap.put("person1", 1);
@@ -53,17 +53,6 @@ public class TermsAggsTest extends AbstractTestRunner {
         // QueryBuilder queryBuilder = new BoolQueryBuilder().should(new TermsQueryBuilder("from", "person1", "person2", "person"))
         /*SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(new TermsQueryBuilder())*/
-
-
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -118,11 +107,11 @@ public class TermsAggsTest extends AbstractTestRunner {
         super.clearIndex(ReceiptEntity.class);
         // want to find persons in from or to fields
         List<ReceiptEntity> receipts = Arrays.asList(
-            new ReceiptEntity(null, "person1", "person2", 100),
-            new ReceiptEntity(null, "person1", "person3", 100),
-            new ReceiptEntity(null, "person2", "person1", 100),
-            new ReceiptEntity(null, "person2", "person4", 100),
-            new ReceiptEntity(null, "person3", "person1", 100)
+            ReceiptEntity.builder().from("person1").to("person2").price(1).build(),
+            ReceiptEntity.builder().from("person1").to("person3").price(1).build(),
+            ReceiptEntity.builder().from("person2").to("person1").price(1).build(),
+            ReceiptEntity.builder().from("person2").to("person4").price(1).build(),
+            ReceiptEntity.builder().from("person3").to("person1").price(1).build()
         );
 
         super.bulkProcess(receipts);
@@ -138,5 +127,8 @@ public class TermsAggsTest extends AbstractTestRunner {
             return response.getAggregations();
         });
     }
+
+
+
 }
 

@@ -44,12 +44,11 @@ public class TermsQueryTest extends AbstractTestRunner {
             super.clearIndex(ReceiptEntity.class);
             // person1 : 1 // person2 : 3 // person3 : 3 // person4 : 1 // person5 : 2
             List<ReceiptEntity> receiptEntities = Arrays.asList(
-                new ReceiptEntity(null, "person1", "person2", 1),
-                new ReceiptEntity(null, "person2", "person3", 1),
-                new ReceiptEntity(null, "person3", "person4", 1),
-                new ReceiptEntity(null, "person3", "person5", 1),
-                new ReceiptEntity(null, "person5", "person2", 1),
-                new ReceiptEntity(null, "0xdacc9c61754a0c4616fc5323dc946e89eb272302 0x682b7903a11098cf770c7aef4aa02a85b3f3601a", null, 1)
+                ReceiptEntity.builder().from("person1").to("person2").price(1).build(),
+                ReceiptEntity.builder().from("person2").to("person3").price(1).build(),
+                ReceiptEntity.builder().from("person3").to("person4").price(1).build(),
+                ReceiptEntity.builder().from("person3").to("person5").price(1).build(),
+                ReceiptEntity.builder().from("person5").to("person2").price(1).build()
             );
 
             receiptRepository.saveAll(receiptEntities);
