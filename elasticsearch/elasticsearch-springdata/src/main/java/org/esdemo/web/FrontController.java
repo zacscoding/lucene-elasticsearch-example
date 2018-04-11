@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class FrontController {
-    @Autowired
-    MappingTestRepository repository;
 
     @GetMapping("/")
     public String test() throws Exception {

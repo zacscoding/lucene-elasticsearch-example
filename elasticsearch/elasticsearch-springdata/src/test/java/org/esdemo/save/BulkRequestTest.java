@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.DocWriteRequest.OpType;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -25,6 +29,8 @@ import org.elasticsearch.action.bulk.BulkProcessor.Listener;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateRequestBuilder;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.IdsQueryBuilder;
@@ -35,6 +41,7 @@ import org.esdemo.dto.Counter;
 import org.esdemo.util.SimpleLogger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.boot.test.autoconfigure.filter.TypeExcludeFilters;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -50,10 +57,10 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
  * @GitHub : https://github.com/zacscoding
  */
 public class BulkRequestTest extends AbstractTestRunner {
+
     @Test
     public void compareItemIndexAndListIndex() throws Exception {
         super.clearIndex(BulkRequestEntity.class);
-
         Counter counter = new Counter();
         BulkProcessor bulkProcessor = BulkProcessor.builder(client, new Listener() {
             @Override
@@ -229,6 +236,51 @@ public class BulkRequestTest extends AbstractTestRunner {
         assertTrue(e2.getTestField() == 2);
     }
 
+    @Test
+    public void updateButNotExistDocu() throws Exception {
+        BulkProcessor bulkProcessor = BulkProcessor.builder(client, new Listener() {
+            @Override
+            public void beforeBulk(long executionId, BulkRequest request) {}
+
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+                List<Object> payloads = request.payloads();
+                if(payloads == null) {
+                    System.out.println("payloads is null");
+                } else {{
+                    System.out.println("payloads size : " + payloads.size());
+                }}
+                if (response.hasFailures()) {
+                    for (BulkItemResponse itemResponse : response.getItems()) {
+                        if (itemResponse.isFailed()) {
+                            SimpleLogger.println("## index : {}, type : {}, id : {}, status : {}",
+                                itemResponse.getIndex(), itemResponse.getType(), itemResponse.getId(), itemResponse.status().getStatus());
+                        }
+                    }
+                }
+            }
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+                SimpleLogger.println("## after bulk with exception");
+            }
+        }).setBulkActions(1).setFlushInterval(new TimeValue(1L, TimeUnit.SECONDS)).setConcurrentRequests(0).build();
+
+        super.clearIndex(BulkRequestEntity.class);
+
+        final String index = "bulk-request-test";
+        final String type = "test";
+
+        UpdateRequest updateRequest = new UpdateRequest(index, type, "test");
+        Map<String,Object> param = new HashMap<>();
+        param.put("testField", 10);
+        updateRequest.doc(param);
+
+        bulkProcessor.add(updateRequest);
+        client.admin().indices().prepareRefresh("bulk-request-test").get();
+        bulkProcessor.flush();
+        TimeUnit.SECONDS.sleep(1L);
+    }
+
     public BulkRequestEntity findOneById(String id) {
         GetQuery getQuery = new GetQuery();
         getQuery.setId(id);
@@ -239,12 +291,40 @@ public class BulkRequestTest extends AbstractTestRunner {
     @Ignore
     public void testSearch() {
 
-
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(new IdsQueryBuilder().addIds("2","3"))
             .build();
         Page<BulkRequestEntity> pages = elasticsearchTemplate.queryForPage(searchQuery, BulkRequestEntity.class);
         System.out.println(pages.getTotalElements());
+    }
+
+    @Test
+    public void checkListener() throws Exception {
+        super.clearIndex(BulkRequestEntity.class);
+
+        BulkProcessor bulkProcessor = BulkProcessor.builder(client, new Listener() {
+            @Override
+            public void beforeBulk(long executionId, BulkRequest request) {
+            }
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+                for (BulkItemResponse item : response.getItems()) {
+                    DocWriteRequest req = request.requests().get(item.getItemId());
+                    SimpleLogger.println("class : {}, index : {}, type : {}, id : {}",
+                        req.getClass().getName(), req.index(), req.type(), req.id());
+                }
+            }
+
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+            }
+        }).setBulkActions(1).setConcurrentRequests(0).build();
+        ObjectMapper mapper = new ObjectMapper();
+        final String index = "bulk-request-test";
+        final String type = "test";
+        bulkProcessor.add(new IndexRequest(index, type).source(mapper.writeValueAsBytes(BulkRequestEntity.builder().testField(100).build()), XContentType.JSON));
+        client.admin().indices().prepareRefresh(index).get();
+        bulkProcessor.close();
     }
 
     private IndexRequest getIndexRequest() throws Exception {

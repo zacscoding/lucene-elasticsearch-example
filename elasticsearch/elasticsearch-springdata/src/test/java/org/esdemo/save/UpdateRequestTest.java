@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,9 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContent;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.engine.VersionConflictEngineException;
+import org.elasticsearch.index.reindex.UpdateByQueryAction;
+import org.elasticsearch.index.reindex.UpdateByQueryRequestBuilder;
 import org.esdemo.AbstractTestRunner;
 import org.esdemo.util.SimpleLogger;
 import org.junit.After;
@@ -61,7 +65,7 @@ public class UpdateRequestTest extends AbstractTestRunner {
 
     @After
     public void tearDown() {
-        elasticsearchTemplate.deleteIndex(UpdateRequestTestEntity.class);
+        //elasticsearchTemplate.deleteIndex(UpdateRequestTestEntity.class);
     }
 
     @Test
@@ -85,7 +89,34 @@ public class UpdateRequestTest extends AbstractTestRunner {
     }
 
     @Test
-    public void updateOnlyOne() throws IOException {
+    public void updateOneOne() throws Exception {
+        UpdateRequestTestEntity e1 = UpdateRequestTestEntity.builder().id("test1").name("name").age(1).build();
+        assertTrue(super.save(e1));
+        UpdateRequest r1 = new UpdateRequest().index(indexName).type(type).id("test1")
+                                              .doc(XContentBuilder.builder(XContentType.JSON.xContent()).startObject().field("name", "name2").endObject()).version(1L);
+        UpdateResponse res = elasticsearchTemplate.getClient().update(r1).get();
+        try {
+            UpdateRequest r2 = new UpdateRequest().index(indexName).type(type).id("test1")
+                                                  .doc(XContentBuilder.builder(XContentType.JSON.xContent()).startObject().field("name", "name3").endObject()).version(1L);
+            res = elasticsearchTemplate.getClient().update(r2).get();
+        } catch (VersionConflictEngineException e) {
+            System.out.println("Exception :: " + e.getClass().getName());
+        } catch (Exception e) {
+            if(e.getClass().isAssignableFrom(VersionConflictEngineException.class)) {
+                System.out.println("if(e.getClass().isAssignableFrom(VersionConflictEngineException.class))");
+            } else if(e.getCause().getClass().isAssignableFrom(VersionConflictEngineException.class)) {
+                System.out.println("e.getCause().getClass().isAssignableFrom(VersionConflictEngineException.class)");
+            } else {
+                System.out.println("if is false");
+            }
+
+            System.out.println("Exception :: " + e.getClass().getName());
+            System.out.println("Message :: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void updateOnlyOneWithBulk() throws IOException {
         UpdateRequestTestEntity e1 = UpdateRequestTestEntity.builder().id("test1").name("name").age(1).build();
 
         assertTrue(super.save(e1));
@@ -149,7 +180,7 @@ public class UpdateRequestTest extends AbstractTestRunner {
 @AllArgsConstructor
 @ToString
 @Builder
-@Document(indexName = "update-request-test", type = "test", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "update-request-test", type = "test", shards = 1, replicas = 0, refreshInterval = "1s")
 class UpdateRequestTestEntity {
 
     @Id

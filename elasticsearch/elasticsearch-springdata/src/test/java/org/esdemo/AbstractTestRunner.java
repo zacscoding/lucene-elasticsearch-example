@@ -1,6 +1,7 @@
 package org.esdemo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vividsolutions.jts.util.Assert;
 import java.util.List;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
@@ -42,14 +43,16 @@ public class AbstractTestRunner {
     }
 
     protected void clearIndex(Class<?> clazz) {
-        elasticsearchTemplate.deleteIndex(clazz);
-        elasticsearchTemplate.createIndex(clazz);
-        elasticsearchTemplate.putMapping(clazz);
+        if (elasticsearchTemplate.indexExists(clazz)) {
+            Assert.isTrue(elasticsearchTemplate.deleteIndex(clazz));
+        }
+        Assert.isTrue(elasticsearchTemplate.createIndex(clazz));
+        Assert.isTrue(elasticsearchTemplate.putMapping(clazz));
         elasticsearchTemplate.refresh(clazz);
     }
 
     protected <T> boolean save(T inst) {
-        if(inst == null) {
+        if (inst == null) {
             return false;
         }
 
@@ -57,11 +60,10 @@ public class AbstractTestRunner {
 
         try {
             IndexResponse response = elasticsearchTemplate.getClient().prepareIndex(persistentEntity.getIndexName(), persistentEntity.getIndexType())
-                                                           .setId(ReflectionUtil.getSpringDataId(inst))
-                                                           .setSource(objectMapper.writeValueAsBytes(inst), XContentType.JSON)
-                                                           .get();
+                                                          .setId(ReflectionUtil.getSpringDataId(inst))
+                                                          .setSource(objectMapper.writeValueAsBytes(inst), XContentType.JSON).get();
             return response.status().getStatus() == 201;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -75,20 +77,14 @@ public class AbstractTestRunner {
         BulkProcessor bulkProcessor = BulkProcessor.builder(client, new BulkProcessor.Listener() {
             @Override
             public void beforeBulk(long executionId, BulkRequest request) {
-                SimpleLogger.build()
-                            .appendRepeat(20, "===").newLine()
-                            .appendln("beforeBulk.. id : {}", executionId)
-                            .appendln("req::numberOfActions() : {}", request.numberOfActions())
-                            .flush();
+                SimpleLogger.build().appendRepeat(20, "===").newLine().appendln("beforeBulk.. id : {}", executionId)
+                            .appendln("req::numberOfActions() : {}", request.numberOfActions()).flush();
             }
 
             @Override
             public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
-                SimpleLogger.build()
-                            .appendRepeat(20, "===").newLine()
-                            .appendln("afterBulk.. id : {}", executionId)
-                            .appendln("  req::numberOfActions() : {}", request.numberOfActions())
-                            .appendln("  res::status() : {}", response.status())
+                SimpleLogger.build().appendRepeat(20, "===").newLine().appendln("afterBulk.. id : {}", executionId)
+                            .appendln("  req::numberOfActions() : {}", request.numberOfActions()).appendln("  res::status() : {}", response.status())
                             .flush();
                 if (response.hasFailures()) {
                     for (BulkItemResponse item : response.getItems()) {
@@ -102,11 +98,8 @@ public class AbstractTestRunner {
 
             @Override
             public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
-                SimpleLogger.build()
-                            .appendRepeat(20, "===").newLine()
-                            .appendln("afterBulk.. id : {}", executionId)
-                            .appendln("req::numberOfActions() : {}", request.numberOfActions())
-                            .appendln("fail::message : {}", failure.getMessage())
+                SimpleLogger.build().appendRepeat(20, "===").newLine().appendln("afterBulk.. id : {}", executionId)
+                            .appendln("req::numberOfActions() : {}", request.numberOfActions()).appendln("fail::message : {}", failure.getMessage())
                             .flush();
             }
         }).setBulkActions(entities.size()).setConcurrentRequests(0).setFlushInterval(TimeValue.timeValueSeconds(5L)).build();
@@ -130,7 +123,8 @@ public class AbstractTestRunner {
         entities.forEach(entity -> {
             try {
                 System.out.println(mapper.writeValueAsString(entity));
-                bulkProcessor.add(new IndexRequest(indexAndType.getFirst(), indexAndType.getSecond()).source(mapper.writeValueAsBytes(entity), XContentType.JSON));
+                bulkProcessor.add(
+                    new IndexRequest(indexAndType.getFirst(), indexAndType.getSecond()).source(mapper.writeValueAsBytes(entity), XContentType.JSON));
             } catch (Exception e) {
                 SimpleLogger.error("Failed to parse json", e);
             }
