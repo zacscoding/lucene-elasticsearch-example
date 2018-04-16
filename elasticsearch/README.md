@@ -1,4 +1,59 @@
-# ElasticSearch  + Java API + Spring Data ElasticSearch Learning 
+# ElasticSearch  + Java API + Spring Data ElasticSearch Learning
+
+# Install
+
+## Centos7
+
+> File descriptor limit  
+
+```
+$vi /etc/security/limit.conf  
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html  
+
+#<domain>      <type>  <item>         <value>
+app             -        nofile         65536
+```  
+
+# Plugins  
+
+## HEAD  
+https://github.com/mobz/elasticsearch-head  
+
+
+> install npm  
+
+```
+$yum install epel-release
+$yum install npm node.js
+$node -v , npm -v
+```  
+
+> head download & run  
+```
+$git clone https://github.com/mobz/elasticsearch-head.git  
+$npm install
+$npm run start  
+```  
+
+> add elasticsearch.yml  
+
+```
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+```  
+
+
+
+
+
+
+
+
+
+
+
+
 
 **ref**
 

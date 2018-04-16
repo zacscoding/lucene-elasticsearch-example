@@ -73,7 +73,6 @@ public class BulkProcessServiceWithSingleton {
             public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
                 SimpleLogger.printTitle(ThreadUtil.getCurrentThreadInform() + " : After bulk : " + executionId);
                 // handle after bulk
-                // DocWriteRequest req = request.requests().get(0);
                 for (BulkItemResponse itemResponse : response.getItems()) {
                     DocWriteRequest req = request.requests().get(itemResponse.getItemId());
                     if (!(req instanceof IBulkRequest)) {
@@ -82,12 +81,10 @@ public class BulkProcessServiceWithSingleton {
                     }
 
                     IBulkRequest bulkRequest = (IBulkRequest) req;
-                    BulkItemResponseConsumer consumer = bulkRequest.getConsumer(itemResponse.isFailed());
+                    BulkItemResponseConsumer consumer = bulkRequest.getConsumer();
                     if (consumer != null && bulkRequest.getRequestInstance() != null) {
                         SimpleLogger.println("## Accept response");
                         consumer.accept(itemResponse, bulkRequest.getRequestInstance());
-                    } else {
-                        SimpleLogger.println("Consumer or Instance is null consumer : {}, instance : {}", consumer, bulkRequest.getRequestInstance());
                     }
                 }
             }

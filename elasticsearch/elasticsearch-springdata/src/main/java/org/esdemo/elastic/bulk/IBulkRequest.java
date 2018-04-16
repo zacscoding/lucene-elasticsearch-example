@@ -8,5 +8,5 @@ package org.esdemo.elastic.bulk;
 public interface IBulkRequest {
     Object getRequestInstance();
 
-    BulkItemResponseConsumer getConsumer(boolean isFailed);
+    BulkItemResponseConsumer getConsumer();
 }

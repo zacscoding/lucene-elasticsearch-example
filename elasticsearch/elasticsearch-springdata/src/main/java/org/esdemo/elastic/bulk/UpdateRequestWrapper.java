@@ -9,8 +9,7 @@ import org.elasticsearch.action.update.UpdateRequest;
  */
 public class UpdateRequestWrapper extends UpdateRequest implements IBulkRequest {
 
-    private BulkItemResponseConsumer successConsumer;
-    private BulkItemResponseConsumer failConsumer;
+    private BulkItemResponseConsumer responseConsumer;
     private Object requestInstance;
 
 
@@ -22,12 +21,8 @@ public class UpdateRequestWrapper extends UpdateRequest implements IBulkRequest 
         super(index, type, id);
     }
 
-    public void setSuccessConsumer(BulkItemResponseConsumer successConsumer) {
-        this.successConsumer = successConsumer;
-    }
-
-    public void setFailConsumer(BulkItemResponseConsumer failConsumer) {
-        this.failConsumer = failConsumer;
+    public void setResponseConsumer(BulkItemResponseConsumer responseConsumer) {
+        this.responseConsumer = responseConsumer;
     }
 
     public void setRequestInstance(Object requestInstance) {
@@ -40,7 +35,7 @@ public class UpdateRequestWrapper extends UpdateRequest implements IBulkRequest 
     }
 
     @Override
-    public BulkItemResponseConsumer getConsumer(boolean isFailed) {
-        return isFailed ? failConsumer : successConsumer;
+    public BulkItemResponseConsumer getConsumer() {
+        return responseConsumer;
     }
 }
