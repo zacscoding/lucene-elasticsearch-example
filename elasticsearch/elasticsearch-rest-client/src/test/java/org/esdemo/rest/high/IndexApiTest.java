@@ -22,7 +22,7 @@ public class IndexApiTest {
 
     @Test
     public void indexPerson() throws Exception {
-        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)).build());
+        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)));
 
         Person p = Person.builder().ssn("180504-1111111").name("Zaccoding").age(1).hobbies(Arrays.asList("Elastic Search", "coding")).build();
 

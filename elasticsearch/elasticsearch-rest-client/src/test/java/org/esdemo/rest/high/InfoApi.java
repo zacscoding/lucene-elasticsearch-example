@@ -19,14 +19,17 @@ public class InfoApi {
 
     @Test
     public void clusterInfo() throws Exception {
-        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)).build());
+        RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA))
+        );
+
         MainResponse response = client.info();
 
         /*
-        Cluster Name : Cluster [test]
-        Cluster UUID : sCnCR-5jRB27eKjrQ1Yn_w
-        Node Name : GW2UnYx
-        Version : 5.6.8
+        Cluster Name : Cluster [my-application]
+        Cluster UUID : qlTOooqCRJGYc3Oa2UU1Eg
+        Node Name : RzBjCFg
+        Version : 6.2.4
          */
         SimpleLogger.build()
                     .appendln("Cluster Name : " + response.getClusterName().toString())

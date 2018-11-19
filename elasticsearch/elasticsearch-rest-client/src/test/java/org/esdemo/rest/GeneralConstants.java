@@ -7,7 +7,7 @@ package org.esdemo.rest;
  */
 public class GeneralConstants {
 
-    public static final String HOST_NAME = "localhost";
+    public static final String HOST_NAME = "192.168.5.78";
     public static final int PORT = 9200;
     public static final String SCHEMA = "http";
 }

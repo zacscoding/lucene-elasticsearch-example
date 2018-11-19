@@ -21,7 +21,7 @@ public class DeleteRequestTest {
     @Test
     public void defaultTest() throws Exception {
         RestHighLevelClient client = new RestHighLevelClient(
-            RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)).build());
+            RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)));
 
         Person p = Person.builder().ssn("1").name("Zaccoding").age(1).hobbies(Arrays.asList("Elastic Search", "coding")).build();
         ObjectMapper objectMapper = new ObjectMapper();

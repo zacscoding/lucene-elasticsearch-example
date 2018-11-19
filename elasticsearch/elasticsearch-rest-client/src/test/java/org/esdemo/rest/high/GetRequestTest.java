@@ -24,7 +24,7 @@ public class GetRequestTest {
 
     @Test
     public void defaultGet() throws IOException {
-        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)).build());
+        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(GeneralConstants.HOST_NAME, GeneralConstants.PORT,GeneralConstants.SCHEMA)));
 
         GetRequest getRequest = new GetRequest("persons", "doc", "180504-1111111");
         GetResponse getResponse = client.get(getRequest);
@@ -78,7 +78,7 @@ public class GetRequestTest {
 
     @Test
     public void handleError() {
-        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")).build());
+        RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")));
 
         /*
         ## RestStatus.CONFLICT

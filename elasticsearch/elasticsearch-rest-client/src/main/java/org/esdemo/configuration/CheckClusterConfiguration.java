@@ -34,7 +34,7 @@ public class CheckClusterConfiguration {
     private void highLevelClientCheck() {
         try {
             SimpleLogger.println("## Try to connect ==>  host : {}, port : {}, schema : {}", hostName, port, schema);
-            RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(hostName, port, schema)).build());
+            RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(hostName, port, schema)));
             MainResponse response = client.info();
 
             SimpleLogger.build()
