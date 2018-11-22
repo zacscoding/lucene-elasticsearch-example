@@ -1,4 +1,4 @@
-package org.esdemo.rest.high;
+package org.esdemo.rest.high.indices;
 
 import java.io.IOException;
 import org.apache.http.HttpHost;

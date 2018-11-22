@@ -1,0 +1,9 @@
+{
+	"person" : {
+		"properties" : {
+			"age"     : { "type" : "long" },
+			"name"    : {"type" : "keyword" },
+			"hobbies" : {"type" : "text"}
+		}
+	}
+}

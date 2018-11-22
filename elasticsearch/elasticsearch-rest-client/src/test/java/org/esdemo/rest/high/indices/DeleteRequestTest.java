@@ -1,4 +1,4 @@
-package org.esdemo.rest.high;
+package org.esdemo.rest.high.indices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;

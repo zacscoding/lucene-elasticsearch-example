@@ -1,4 +1,4 @@
-package org.esdemo.rest.high;
+package org.esdemo.rest.high.indices;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.main.MainResponse;
@@ -37,7 +37,6 @@ public class InfoApi {
                     .appendln("Node Name : " + response.getNodeName())
                     .appendln("Version : " + response.getVersion())
                     .flush();
-
     }
 
 }

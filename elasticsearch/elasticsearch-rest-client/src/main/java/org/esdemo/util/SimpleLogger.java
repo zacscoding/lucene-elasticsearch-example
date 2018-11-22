@@ -1,30 +1,62 @@
 package org.esdemo.util;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Simple Logger for dev...
+ * SimpleLogger for dev
+ *
  * @author zacconding
- * @Date 2018-01-14
+ * @Date 2018-05-31
  * @GitHub : https://github.com/zacscoding
  */
 public class SimpleLogger {
-
-    public static String NEW_LINE;
+    /** Statics */
+    private static String NEW_LINE;
     private static PrintStream PS;
-    public static SimpleDateFormat SIMPLE_DATE_FORMAT;
-
+    private static SimpleDateFormat SIMPLE_DATE_FORMAT;
+    private static final Object LOCK = new Object();
     static {
         NEW_LINE = System.getProperty("line.separator");
         if (NEW_LINE == null || NEW_LINE.length() == 0) {
             NEW_LINE = "\n";
         }
         SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyMMdd HH:mm:ss.SSS");
+        // can change PrintStream here
         PS = System.out;
+    }
+
+    /**
+     * Set newLine
+     * default : System.getProperty("line.separator")
+     */
+    public static void setNewLine(String newLine) {
+        NEW_LINE = newLine;
+    }
+
+    /**
+     * Set PrintStream
+     * default : System.out
+     */
+    public static void setPS(PrintStream PS) {
+        SimpleLogger.PS = PS;
+    }
+
+    /**
+     * Set log date format
+     * default : "yyMMdd HH:mm:ss.SSS"
+     */
+    public static void setSimpleDateFormat(SimpleDateFormat simpleDateFormat) {
+        SIMPLE_DATE_FORMAT = simpleDateFormat;
+    }
+
+    /**
+     * parse {} -> args[i]
+     */
+    public static String parseContent(String message, Object... args) {
+        StringBuilder sb = new StringBuilder();
+        parseContent(sb, message, args);
+        return sb.toString();
     }
 
     public static void print(String message, Object... args) {
@@ -34,8 +66,10 @@ public class SimpleLogger {
     }
 
     public static void println(String message, Object... args) {
-        print(message, args);
-        PS.println();
+        synchronized (LOCK) {
+            print(message, args);
+            PS.println();
+        }
     }
 
     public static void info(String message, Object... args) {
@@ -49,9 +83,11 @@ public class SimpleLogger {
 
     public static void error(String message, Throwable t) {
         String prefix = SIMPLE_DATE_FORMAT.format(new Date()) + " [ERROR] " + getClassName() + " : ";
-        println(prefix + (message == null ? "" : message));
-        if (t != null) {
-            t.printStackTrace(PS);
+        synchronized (LOCK) {
+            println(prefix + (message == null ? "" : message));
+            if (t != null) {
+                t.printStackTrace(PS);
+            }
         }
     }
 
@@ -98,30 +134,6 @@ public class SimpleLogger {
         return sb.toString();
     }
 
-    public static String toJson(Object inst) {
-        return toJson(new Gson(), inst);
-    }
-
-    public static String toJsonWithPretty(Object inst) {
-        return toJson(new GsonBuilder().setPrettyPrinting().create(), inst);
-    }
-
-    public static void printJSON(Object inst) {
-        PS.println(toJson(inst));
-    }
-
-    public static void printJSONPretty(Object inst) {
-        PS.println(toJsonWithPretty(inst));
-    }
-
-    public static String toJson(Gson gson, Object inst) {
-        if (gson == null || inst == null) {
-            return "{}";
-        }
-
-        return gson.toJson(inst);
-    }
-
     private static void parseContent(StringBuilder sb, String content, Object[] args) {
         if (args == null || args.length == 0 || content == null || content.length() < 2) {
             sb.append(content);
@@ -153,15 +165,40 @@ public class SimpleLogger {
         return Thread.currentThread().getStackTrace()[3].getClassName();
     }
 
+    private static final class LoggerContextManager {
+        private static ThreadLocal<SimpleLogger> contexts = new ThreadLocal<>();
 
-    public static SimpleLogger build() {
-        return new SimpleLogger();
+        public static SimpleLogger getOrCreate() {
+            SimpleLogger logger = null;
+
+            if((logger = contexts.get()) == null) {
+                logger = new SimpleLogger();
+                contexts.set(logger);
+            }
+
+            return logger;
+        }
+
+        public static SimpleLogger clear() {
+            SimpleLogger logger = null;
+
+            if((logger = contexts.get()) != null) {
+                contexts.set(null);
+            }
+
+            return logger;
+        }
     }
 
-    private StringBuilder sb;
 
+    /** Instance */
+    private StringBuilder sb;
     private SimpleLogger() {
         sb = new StringBuilder();
+    }
+
+    public static SimpleLogger build() {
+        return LoggerContextManager.getOrCreate();
     }
 
     public SimpleLogger append(String message, Object... args) {
@@ -222,6 +259,13 @@ public class SimpleLogger {
         return sb == null ? "" : sb.toString();
     }
 
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LoggerContextManager.clear();
+    }
+
     /**
      * Simple Test from console...
      */
@@ -256,6 +300,11 @@ public class SimpleLogger {
         // tab1			tab2
         SimpleLogger.build().appendTab(3, "tab1").appendln("tab2").flush();
         // ==================== test ====================
-        SimpleLogger.build().appendRepeat(20, "=").append(" test ").appendRepeat(20, "=").flush();
+        SimpleLogger.build().appendRepeat(20, "=").append(" test ").appendRepeat(20, "=").newLine().flush();
+
+        // ## Check logger inst => is same instance ? : true
+        SimpleLogger logger1 = SimpleLogger.build();
+        SimpleLogger logger2 = SimpleLogger.build();
+        System.out.println("## Check logger inst => is same instance ? : " + (logger1 == logger2));
     }
 }
